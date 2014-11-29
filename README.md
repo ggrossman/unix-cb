@@ -19,7 +19,7 @@ on one called Morrison Hotel (MoHo). It had 10 lines and unlike most BBS's
 which ran on software like PCBoard or WWIV on a IBM PC running MS-DOS,
 MoHo was running custom BBS software built on SCO UNIX. It was written by
 two Unix wizards, Mike Cantu and Eric Pederson, who worked for a company
-called USCAD. (USCAD appears to still be around; see http://www.uscad.com)
+called US CAD. (US CAD appears to still be around; see http://www.uscad.com)
 
 The system was called "SkyNet." It was text mode and menu-driven, like
 everything online in that era, but it was surprisingly usable and
@@ -37,6 +37,8 @@ I still remember many of the commands:
 - `/p` would send a private message to another user; after typing `/p` you
   could immediately type the username of the user you wanted
   to PM.
+- `/q` logged you off ... but `/g` let you slip away silently, which was
+  useful more frequently than you'd think.
 - `/5` would turn on the Jive filter, which was an old example of the
   `lex` lexical scanner tool that floated around Unix sites in those days.
   It's definitely not politically correct.
@@ -65,7 +67,7 @@ indicating their subscription status:
 
 My first computer was an Apple ][, followed by a 512K "Fat Mac." I'd often
 put in hours on my parents' PC clones as well. But I desperately wanted to
-learn Unix, but this was a few years before Linus Torvalds democratized
+learn Unix, and this was a few years before Linus Torvalds democratized
 access to Unix-like operating systems. At one point, another MoHo user and I
 learned about a guy who was giving away an old Unix box for free.
 We drove over in his car and picked it up, and it probably weighed 100
