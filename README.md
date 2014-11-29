@@ -1,9 +1,10 @@
 unix-cb
 =======
 
-In middle school and high school in the early 90's, I spent an inordinate
-amount of time hanging out on BBS's (Bulletin Board Systems), which I'd dial
-up on a 2400-baud modem and block up my family's phone line for hours on end.
+In middle school and high school in the late 80's / early 90's, I spent an
+inordinate amount of time hanging out on BBS's (Bulletin Board Systems),
+which I'd dial up on a 2400-baud modem and block up my family's phone line
+for hours on end.
 
 Most BBS's of that era were single-line, running off a PC with a modem
 connected to a single dedicated phone line. When you dialed in, there was an
