@@ -75,14 +75,14 @@ it probably got thrown in the dump.
 
 When I was 15, an uncle passed on a discarded Sun 2 workstation to me.
 I knew that Unix/CB was written as multiple processes coordinating via
-System V IPC message queues. Another user on MoHo, Brett Vickers, a
-few years older than me and now a CS professor at UC Irvine, had
-written a game for the site called Mordor. His first version of Mordor
-also used SysV IPC but the second version was a single process that
-multiplexed all I/O via BSD `select()`. I decided I wanted to learn BSD
-socket programming so I started duplicating Unix/CB using sockets and
-a `select()` loop at the core, with every interaction handled using
-state transitions via function pointers.
+System V IPC message queues. Another user on MoHo, Brett J. Vickers, now
+lead programmer at ArenaNet, had written a game for the site called
+Quest for Mordor. His first version of the game also used System V IPC,
+but the second version was a single process that multiplexed all I/O via
+BSD `select()`. I decided I wanted to learn BSD socket programming,
+so I started duplicating Unix/CB using sockets and a `select()` loop at
+the core, with every interaction handled using state transitions via
+function pointers.
 
 When I got to UC Berkeley, the CSUA (Computer Science Undergraduate
 Association) ran a machine called `soda.berkeley.edu`. (The CS building
