@@ -92,12 +92,16 @@ Association) ran a machine called `soda.berkeley.edu`. (The CS building
 at Cal, which opened my junior year, is called Soda Hall.) As a
 CS freshman, I immediately started collecting as many Unix accounts
 as possible. When I learned that the CSUA handed out free (LIFETIME!)
-Unix accounts on soda.berkeley.edu, I immediately joined the CSUA.
+Unix accounts on `soda.berkeley.edu`, I immediately joined the CSUA.
 I started running my chat server on soda just to try it out.
-Of course, on soda, anything you did was being watched by every other
+The soda machine was, however, a very collaborative environment.
+Students were constantly communicating with each other using `wall`
+broadcast messages, to the point where someone wrote a CSUA-specific
+`wallall` utility which had more configuration options than default
+`wall`. On soda, anything you did was being watched by every other
 CS major on the box. Several other students saw the open port
-(I think I used 5492, the last four digits of my parents' phone
-number) and telnet-ed to it.
+(I used `5492`, the last four digits of my parents' phone number)
+and `telnet`-ed to it.
 
 ### Vrave
 
