@@ -147,6 +147,15 @@ something he had written 10+ years earlier. Through Vrave we reconnected
 briefly and he set up an instance of the original Unix/CB and we
 both logged into it and chatted.
 
+### The Original Gangsta
+
+After posting this code, I reached out to Eric Pederson. He was intrigued
+and posted the code to the original Unix/CB to Github. It's available at
+https://github.com/sourcedelica/unix-cb. This was just amazing to me because I
+thought I'd never see that code. It also compiled and worked on a modern Linux
+box with only a bit of hackery. Regrettably, it sounds like the rest of the
+Skynet source code may be forever lost.
+
 ### Other flavors
 
 At some point, I wondered whether my code had ever made it into any
@@ -176,8 +185,12 @@ gcc -o cb cb.c
 telnet localhost 5492
 ```
 
-Of course, at this point, it's probably rife with security holes and 
-is little more than a historical amusement.
+With a bit of futzing, I was also able to get the code to compile on
+MacOS X Yosemite.
+
+Of course, at this point, it's probably rife with security holes 
+(`char buf[256]` was a common and acceptable coding pattern back
+in those days) and is little more than a historical amusement.
 
 -Gary Grossman, 11/28/14
 
