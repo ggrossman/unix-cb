@@ -10,6 +10,7 @@
   */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -23,9 +24,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
-
-char   *malloc ();
-char   *ctime ();
+#include <unistd.h>
 
 void add_recent ();
 
@@ -159,7 +158,7 @@ int     sock;
 
 /* squelched: returns nonzero if sp is squelching sq */
 
-squelched (sp, sq)
+int squelched (sp, sq)
 struct slot *sp,
            *sq;
 {
@@ -168,7 +167,7 @@ struct slot *sp,
 
 /* reversed: returns nonzero if sp is reverse squelching sq */
 
-reversed (sp, sq)
+int reversed (sp, sq)
 struct slot *sp,
            *sq;
 {
@@ -247,7 +246,7 @@ struct account *acct;
 
 /* delete_user: deletes user with user-id "id" */
 
-delete_user (id)
+int delete_user (id)
 char   *id;
 {
     FILE * fp;
@@ -294,7 +293,7 @@ struct account *acct;
 
 /* write_user: writes account "acct" at account file offset "pos" */
 
-write_user (pos, acct)
+int write_user (pos, acct)
 long    pos;
 struct account *acct;
 {
@@ -359,7 +358,7 @@ char    ch;
 
 /* qempty returns nonzero if a queue is empty, or zero otherwise. */
 
-qempty (q)
+int qempty (q)
 struct queue   *q;
 {
     return q -> qread == q -> qwrite;
@@ -384,7 +383,7 @@ struct queue   *q;
 
 /* qcreate creates a queue. */
 
-qcreate (q, size)
+int qcreate (q, size)
 struct queue   *q;
 {
     if ((q -> qbase = malloc (size)) == NULL)
@@ -403,7 +402,7 @@ struct queue   *q;
 {
     struct iovec    iov[2];
 
-    if (!qempty (q))
+    if (!qempty (q)) {
 	if (q -> qread < q -> qwrite)
 	    q -> qread += write (sp - slotbase, q -> qread,
 		    q -> qwrite - q -> qread);
@@ -416,11 +415,12 @@ struct queue   *q;
 	    if (q -> qread >= q -> qbase + q -> qsize)
 		q -> qread -= q -> qsize;
 	}
+    }
 }
 
 /* qlength returns the current length of a queue */
 
-qlength (q)
+int qlength (q)
 struct queue   *q;
 {
     if (q -> qread > q -> qwrite)
@@ -617,7 +617,7 @@ void sendpub ();
 /* alloctemp allocates temporary space, or prints an error message if
    it cannot be allocated. */
 
-alloctemp (sp, size)
+int alloctemp (sp, size)
 struct slot *sp;
 {
     if ((sp -> temp = malloc (size)) == NULL) {
@@ -646,7 +646,6 @@ void collapse (sp)
 struct slot *sp;
 {
     struct slot *sq;
-    FILE * fp;
 
     qdispose (&sp -> outq);
     qdispose (&sp -> stopq);
@@ -711,7 +710,7 @@ char    levels[] = "#$%@";
 
 #define MAXNL 20
 
-shared_spec (con, about, ch)
+int shared_spec (con, about, ch)
 struct slot *con,
            *about;
 char    ch;
@@ -1608,14 +1607,14 @@ char   *id;
     struct account  acct;
     struct slot *sp;
 
-    if (id[0])
+    if (id[0]) {
 	if ((sp = slotname (id)) != NULL) {
 	    dump_userinfo (&sp -> acct);
 	    writestr (slot, "Password: ");
 	    writestr (slot, sp -> acct.pw);
 	    writestr (slot, "\n");
 	}
-	else
+	else {
 	    if (read_user (id, &acct) < 0)
 		writestr (slot, "No such user.\n");
 	    else {
@@ -1624,6 +1623,8 @@ char   *id;
 		writestr (slot, acct.pw);
 		writestr (slot, "\n");
 	    }
+	}
+    }
     setread (sendpub, MAXMSG);
 }
 
@@ -1901,35 +1902,35 @@ struct {
             void (*func) ();
     char   *desc;
 }       cmds[MAXCMDS] = {
-            'a', 0, active, "Show list of active users",
-            'c', 1, channel, "Change channel",
-            'd', 1, station, "Broadcast station message",
-            'e', 0, typing, "Check for other users typing",
-            'f', 0, change_fmt, "Change message/active format",
-            'g', 1, goodbye, "Silent quit",
-            'h', 0, handle, "Change handle",
-            'i', 2, inquire, "Inquire about a user",
-            'k', 2, kickoff, "Kick off another user",
-            'l', 0, toggle_list, "Toggle channel listing",
-            'm', 0, monitor, "Toggle monitoring",
-            'o', 0, off, "Log off",
-            'p', 1, pmail, "Send private message",
-            'q', 0, quit, "Quit",
-            'r', 1, reverse, "Reverse squelch",
-            't', 0, print_time, "Display time",
-            '-', 0, list_recent, "List recent users",
-            'x', 1, squelch, "Squelch another user",
-            'y', 0, ystats, "Your stats",
-            'z', 3, send_pa, "Broadcast PA message",
-            'j', 0, toggle_nl, "Toggle newlines",
-            'u', 0, change_nl, "Change newline character",
-            '.', 2, lurk, "Enter lurk mode",
-            '3', 0, setwidth, "Set screen width",
-            '4', 0, togglestat, "Toggle station messages",
-            '%', 1, page_user, "Page another user",
-            '&', 0, change_pw, "Change password",
-            '=', 3, op_func, "Operator function",
-            '?', 0, help, "Help"
+            {'a', 0, active, "Show list of active users"},
+            {'c', 1, channel, "Change channel"},
+            {'d', 1, station, "Broadcast station message"},
+            {'e', 0, typing, "Check for other users typing"},
+            {'f', 0, change_fmt, "Change message/active format"},
+            {'g', 1, goodbye, "Silent quit"},
+            {'h', 0, handle, "Change handle"},
+            {'i', 2, inquire, "Inquire about a user"},
+            {'k', 2, kickoff, "Kick off another user"},
+            {'l', 0, toggle_list, "Toggle channel listing"},
+            {'m', 0, monitor, "Toggle monitoring"},
+            {'o', 0, off, "Log off"},
+            {'p', 1, pmail, "Send private message"},
+            {'q', 0, quit, "Quit"},
+            {'r', 1, reverse, "Reverse squelch"},
+            {'t', 0, print_time, "Display time"},
+            {'-', 0, list_recent, "List recent users"},
+            {'x', 1, squelch, "Squelch another user"},
+            {'y', 0, ystats, "Your stats"},
+            {'z', 3, send_pa, "Broadcast PA message"},
+            {'j', 0, toggle_nl, "Toggle newlines"},
+            {'u', 0, change_nl, "Change newline character"},
+            {'.', 2, lurk, "Enter lurk mode"},
+            {'3', 0, setwidth, "Set screen width"},
+            {'4', 0, togglestat, "Toggle station messages"},
+            {'%', 1, page_user, "Page another user"},
+            {'&', 0, change_pw, "Change password"},
+            {'=', 3, op_func, "Operator function"},
+            {'?', 0, help, "Help"}
 };
 
 void help () {
@@ -2115,7 +2116,6 @@ char   *pw; {
 
 void login (id)
 char   *id; {
-    FILE * fp;
     struct slot *sp;
 
     if (!strcmp (id, "new")) {
@@ -2163,7 +2163,7 @@ char   *msg;
 void initslots () {
     struct slot *sp;
 
-    numslots = getdtablesize ();
+    numslots = FD_SETSIZE;
     if ((slotbase = (struct slot   *) malloc (numslots *
 					      sizeof (struct slot))) == NULL)
       panic ("cbd: malloc");
@@ -2366,9 +2366,9 @@ int     fd;
   */
 
 void accept_connection () {
-    int     len,
-            fd,
+    int     fd,
             yn;
+    socklen_t  len;
     struct sockaddr_in  sockaddr;
     struct hostent *hp;
 
@@ -2441,16 +2441,17 @@ void mainloop () {
     FD_ZERO (&used);
     FD_SET (sock, &used);
     while (1) {
-	bcopy ((char *) & used, (char *) & r, sizeof (fd_set));
+        memcpy(&r, &used, sizeof(fd_set));
 	get_write (&w);
 	if (select (numslots, &r, &w, NULL, NULL) >= 0) {
 	    for (fd = 0; fd < numslots; fd++)
 		if (FD_ISSET (fd, &used)) {
-		    if (FD_ISSET (fd, &r))
+		    if (FD_ISSET (fd, &r)) {
 			if (fd == sock)
 			    accept_connection ();
 			else
 			    process_input (fd);
+	            }
 		    if (FD_ISSET (fd, &w))
 			transmit (slotbase + fd);
 		}
@@ -2488,7 +2489,7 @@ void closestd () {
     close (2);
 }
 
-main (argc, argv)
+int main (argc, argv)
 char   *argv[];
 {
     if (argc == 2)
