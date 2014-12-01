@@ -167,20 +167,26 @@ Skynet source code may be forever lost.
 
 ### Other flavors
 
-At some point, I wondered whether my code had ever made it into any
-open source project. I found a project called `telechat-ng` on the Web a few
-years ago, and I downloaded the tarball and saved it away. The site
+#### telechat-ng
+
+Back in 2000, I wondered whether my code had ever made it into any
+open source project. I found a project called `telechat-ng` on the Web,
+and I downloaded the tarball and saved it away. The Russian site
 that hosted `telechat-ng` is now down, so I've checked that into
 https://github.com/ggrossman/telechat-ng for posterity. Since I'm no
 longer the sole author of that code, I didn't modify the `LICENSE` file.
+
+I also realized that the maintainer of `telechat-ng` was
+[Constantin Kaplinsky](https://twitter.com/glavconst), best known as the
+author of TightVNC. So, this Unix/CB code has been worked on by some
+notable developers.
 
 That version of the code has been through many hands since I touched it, but
 it's still recognizably the crap I wrote in high school. That version of the
 code is probably more stable and well-organized than this code, which is more
 or less the original code I handed off to Brian Behlendorf.
 
-Someone has also written a Python version of the telechat server which
-is available at https://github.com/skyepn/telechat-py.
+#### Enormous Trousers Chat
 
 I'm also delighted to report that there's still a server out there,
 Enormous Trousers Chat. You can reach it by typing this in a terminal
@@ -190,8 +196,10 @@ window:
 telnet chat.f4.ca 6623
 ```
 
+#### telechat-py
+
 That server is maintained by [Skye Nott (@skyepn)](https://github.com/skyepn),
-who has written [telechat-py](https://github.com/skyepn/telechat-py), a Python
+who has also written [telechat-py](https://github.com/skyepn/telechat-py), a Python
 version of the chat server. I'm not sure whether Enormous Trousers
 Chat is running code based on the original C code, or this Python port.
 
