@@ -53,7 +53,7 @@ void add_recent ();
 
 /* Version string */
 
-#define VERSION "Unix-CB 1.0 Beta 11/11/92 Revision 01"
+#define CB_VERSION "Unix-CB 1.0 Beta 11/11/92 Revision 01"
 
 /* Secret password to get @ access */
 
@@ -1802,7 +1802,7 @@ void show_status () {
     struct rusage   rusage;
 
     writestr (slot, "CB version                 = ");
-    writestr (slot, VERSION);
+    writestr (slot, CB_VERSION);
     writestr (slot, "\nProcess ID                 = ");
     writeint (slot, getpid ());
     time (&secs);
