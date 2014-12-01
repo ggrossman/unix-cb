@@ -2,7 +2,7 @@ unix-cb
 =======
 
 In middle school and high school in the late 80's / early 90's, I spent an
-inordinate amount of time hanging out on BBS's (Bulletin Board Systems),
+inordinate amount of time hanging out on [BBS's (Bulletin Board Systems)](http://en.wikipedia.org/wiki/Bulletin_board_system),
 which I'd dial up on a 2400-baud modem and block up my family's phone line
 for hours on end.
 
@@ -19,10 +19,11 @@ the few places where users could interact in real-time. I spent a lot of time
 on one called Morrison Hotel (MoHo). It had 10 lines and unlike most BBS's
 which ran on software like PCBoard or WWIV on a IBM PC running MS-DOS,
 MoHo was running custom BBS software built on SCO UNIX. It was written by
-two Unix wizards, Mike Cantu and Eric Pederson, who worked for a company
-called US CAD. (US CAD appears to still be around; see http://www.uscad.com)
+two Unix wizards, Mike Cantu and [Eric Pederson (@sourcedelica)](https://github.com/sourcedelica),
+who worked for a company called US CAD. (US CAD appears to still be around;
+see http://www.uscad.com)
 
-The system was called "SkyNet." It was text mode and menu-driven, like
+The system was called "Skynet." It was text mode and menu-driven, like
 everything online in that era, but it was surprisingly usable and
 aesthetically pleasing. One of the components of the system was a chat line
 called Unix/CB. Unix/CB had a CB metaphor with numbered channels to
@@ -40,8 +41,9 @@ I still remember many of the commands:
   to PM.
 - `/q` logged you off ... but `/g` let you slip away silently, which was
   useful more frequently than you'd think.
-- `/5` would turn on the Jive filter, which was an old example of the
-  `lex` lexical scanner tool that floated around Unix sites in those days.
+- `/5` would turn on the [Jive filter](http://en.wikipedia.org/wiki/Jive_filter),
+  a gag text filtering program, written with the [lex](http://en.wikipedia.org/wiki/Lex_%28software%29)
+  lexical analyzer generator, which floated around Unix sites in those days.
   It's definitely not politically correct.
 
 One of the best features was `/e` which showed you the list of
@@ -56,8 +58,9 @@ MoHo was a paid site that charged $10/month. Users on MoHo had a character
 indicating their subscription status:
 
 - `#` meant you were unpaid and would be disconnected after 10 minutes. As a
-  13-year old kid with no money, I usually had this status. At some point,
-  this was switched to 3 minutes, after which I just started calling back
+  13-year old kid with no money, I had this status for all but a month or two
+  of my time on MoHo. At some point, US CAD changed the timeout for unpaid
+  users to 3 minutes, after which I just started calling back
   every 3 minutes. Probably I should've gotten the hint that the site was
   troubled financially at that point and ponied up the $10/month.
 - `$` meant you were a paid subscriber.
@@ -76,16 +79,22 @@ pounds. On the way to get it home, we got in a car accident in Tustin and
 his car was totaled. We were unhurt, but we never did get that Unix box...
 it probably got thrown in the dump.
 
-When I was 15, an uncle passed on a discarded Sun 2 workstation to me.
+When I was 16, an uncle passed on a discarded Sun 2 workstation to me.
 I knew that Unix/CB was written as multiple processes coordinating via
 System V IPC message queues. Another user on MoHo, Brett J. Vickers, now
 lead programmer at ArenaNet, had written a game for the site called
 Quest for Mordor. His first version of the game also used System V IPC,
 but the second version was a single process that multiplexed all I/O via
-BSD `select()`. I decided I wanted to learn BSD socket programming,
+BSD `select()`, partly because it was a simpler approach with less
+concurrency challenges, and mostly because he'd moved the game to a
+UCI server running on BSD which had BSD sockets and no System V IPC.
+
+Inspired by Brett, I decided I wanted to learn BSD socket programming,
 so I started duplicating Unix/CB using sockets and a `select()` loop at
 the core, with every interaction handled using state transitions via
-function pointers.
+function pointers. I was working from memory to reincarnate the slick
+UI of MoHo's Unix/CB; US CAD had pulled the plug on MoHo in 1989 over
+a year before I started this work.
 
 When I got to UC Berkeley, the CSUA (Computer Science Undergraduate
 Association) ran a machine called `soda.berkeley.edu`. (The CS building
@@ -107,19 +116,19 @@ and `telnet`-ed to it.
 
 One of them was named Brian Behlendorf, nickname Vitamin B. He
 expressed interest in the chat server and asked if he could have the
-code. I gladly gave it to him.  He was a leader in the San Francisco
+code. I happily gave it to him.  He was a leader in the San Francisco
 rave scene centered at the 1015 Folsom club and set up a "virtual
 rave" server using the Unix/CB code.  "Vrave" would often be set up at
 raves as a desktop computer and you could communicate with ravers at
-OTHER raves. They added features to the server like the string "BOOM
-BOOM BOOM BOOM" being printed occasionally to give a techno feel.
+OTHER raves. They added features to the server like the string `BOOM
+BOOM BOOM BOOM` being printed occasionally to give a techno feel.
 Brian and his fellow developers also undoubtedly fixed numerous bugs
 and actually got the software to be stable production code, which
 it probably wasn't when I gave it to him.
 
 Even though we were both at Cal at the same time, I never met Brian in
 person or even traded more than a few e-mails with him. He, of course,
-went on to be one of the founders of the Apache Server and a leading
+went on to become one of the founders of the Apache Server and a leading
 figure in the open source movement.
 
 His future wife, Laura La Gassa, contacted me at one point and offered
@@ -135,7 +144,7 @@ Vrave ran for 6 years at hyperreal.org. There is still a page up
 about it here: http://hyperreal.org/raves/vrave/
 
 I wasn't paying much attention to Vrave except in the first few months
-that it was up. I've never even been to a rave. But I was floored that
+that it was up. I've never even been to a rave. But I was amazed that
 marriages were conducted over it. And unfortunately, it sounds like
 there was some serious misbehavior by some bad actors that led to
 its demise.
@@ -172,6 +181,19 @@ or less the original code I handed off to Brian Behlendorf.
 
 Someone has also written a Python version of the telechat server which
 is available at https://github.com/skyepn/telechat-py.
+
+I'm also delighted to report that there's still a server out there,
+Enormous Trousers Chat. You can reach it by typing this in a terminal
+window:
+
+```
+telnet chat.f4.ca 6623
+```
+
+That server is maintained by [Skye Nott (@skyepn)](https://github.com/skyepn),
+who has written [telechat-py](https://github.com/skyepn/telechat-py), a Python
+version of the chat server. I'm not sure whether Enormous Trousers
+Chat is running code based on the original C code, or this Python port.
 
 ### Installation and Usage
 
