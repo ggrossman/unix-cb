@@ -36,3 +36,12 @@
 autom4te.cache
 config.log
 config.status
+Makefile
+Makefile.in
+aclocal.m4
+compile
+configure
+depcomp
+install-sh
+missing
+
