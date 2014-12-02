@@ -1,5 +1,4 @@
-unix-cb
-=======
+# unix-cb [![Build Status](https://travis-ci.org/ggrossman/unix-cb.svg?branch=master)](https://travis-ci.org/ggrossman/unix-cb)
 
 In middle school and high school in the late 80's / early 90's, I spent an
 inordinate amount of time hanging out on [BBS's (Bulletin Board Systems)](http://en.wikipedia.org/wiki/Bulletin_board_system),
