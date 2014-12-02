@@ -27,3 +27,12 @@
 *.i*86
 *.x86_64
 *.hex
+
+# Emacs backup files
+*~
+
+# Autotools
+.deps
+autom4te.cache
+config.log
+config.status

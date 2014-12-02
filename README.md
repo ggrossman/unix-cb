@@ -210,7 +210,9 @@ I probably last ran it on `soda.berkeley.edu` in 1992 when that was a
 Sequent DYNIX box. Usage:
 
 ```
-gcc -o cb cb.c
+./autogen.sh
+./configure
+make
 ./cb
 telnet localhost 5492
 ```
