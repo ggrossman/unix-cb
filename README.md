@@ -25,7 +25,7 @@ see http://www.uscad.com)
 The system was called "Skynet." It was text mode and menu-driven, like
 everything online in that era, but it was surprisingly usable and
 aesthetically pleasing. One of the components of the system was a chat line
-called Unix/CB. Unix/CB had a CB metaphor with numbered channels to
+called Unix-CB. Unix-CB had a CB metaphor with numbered channels to
 separate conversations, although 99% of the time people just hung out
 on Channel 1. It had a number of nice touches... all commands started
 with `/` and were one character, and you didn't have to hit Enter after
@@ -79,7 +79,7 @@ his car was totaled. We were unhurt, but we never did get that Unix box...
 it probably got thrown in the dump.
 
 When I was 16, an uncle passed on a discarded Sun 2 workstation to me.
-I knew that Unix/CB was written as multiple processes coordinating via
+I knew that Unix-CB was written as multiple processes coordinating via
 System V IPC message queues. Another user on MoHo, Brett J. Vickers, now
 lead programmer at ArenaNet, had written a game for the site called
 Quest for Mordor. His first version of the game also used System V IPC,
@@ -89,10 +89,10 @@ concurrency challenges, and mostly because he'd moved the game to a
 UCI server running on BSD which had BSD sockets and no System V IPC.
 
 Inspired by Brett, I decided I wanted to learn BSD socket programming,
-so I started duplicating Unix/CB using sockets and a `select()` loop at
+so I started duplicating Unix-CB using sockets and a `select()` loop at
 the core, with every interaction handled using state transitions via
 function pointers. I was working from memory to reincarnate the slick
-UI of MoHo's Unix/CB; US CAD had pulled the plug on MoHo in 1989 over
+UI of MoHo's Unix-CB; US CAD had pulled the plug on MoHo in 1989 over
 a year before I started this work.
 
 When I got to UC Berkeley, the CSUA (Computer Science Undergraduate
@@ -117,7 +117,7 @@ One of them was named Brian Behlendorf, nickname Vitamin B. He
 expressed interest in the chat server and asked if he could have the
 code. I happily gave it to him.  He was a leader in the San Francisco
 rave scene centered at the 1015 Folsom club and set up a "virtual
-rave" server using the Unix/CB code.  "Vrave" would often be set up at
+rave" server using the Unix-CB code.  "Vrave" would often be set up at
 raves as a desktop computer and you could communicate with ravers at
 OTHER raves. They added features to the server like the string `BOOM
 BOOM BOOM BOOM` being printed occasionally to give a techno feel.
@@ -131,7 +131,7 @@ went on to become one of the founders of the Apache Server and a leading
 figure in the open source movement.
 
 His future wife, Laura La Gassa, contacted me at one point and offered
-$100 to license the Unix/CB software. I replied that I didn't want any
+$100 to license the Unix-CB software. I replied that I didn't want any
 money but that they were free to use the code for any purpose as long
 as my name remained on the copyright. I also wrote that credit should
 be given to Skynet since I had basically written an imitation of that
@@ -149,16 +149,16 @@ there was some serious misbehavior by some bad actors that led to
 its demise.
 
 I forget what year this happened, but Eric Pederson, the real original
-author of the first Unix/CB software, actually logged into Vrave at
+author of the first Unix-CB software, actually logged into Vrave at
 some point and was floored that the UI was more or less identical to
 something he had written 10+ years earlier. Through Vrave we reconnected
-briefly and he set up an instance of the original Unix/CB and we
+briefly and he set up an instance of the original Unix-CB and we
 both logged into it and chatted.
 
 ### The Original Gangsta
 
 After posting this code, I reached out to Eric Pederson. He was intrigued
-and posted the code to the original Unix/CB to Github. It's available at
+and posted the code to the original Unix-CB to Github. It's available at
 https://github.com/sourcedelica/unix-cb. This was just amazing to me because I
 thought I'd never see that code. It also compiled and worked on a modern Linux
 box with only a bit of hackery. Regrettably, it sounds like the rest of the
@@ -177,7 +177,7 @@ longer the sole author of that code, I didn't modify the `LICENSE` file.
 
 I also realized that the maintainer of `telechat-ng` was
 [Constantin Kaplinsky](https://twitter.com/glavconst), best known as the
-author of TightVNC. So, this Unix/CB code has been worked on by some
+author of TightVNC. So, this Unix-CB code has been worked on by some
 notable developers.
 
 That version of the code has been through many hands since I touched it, but
