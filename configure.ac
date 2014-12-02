@@ -1,5 +1,5 @@
 AC_INIT([cb], 1.0, [cb])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign])
 AC_PROG_CC
 AC_CONFIG_SRCDIR([cb.c])
 AC_CONFIG_FILES([Makefile])
