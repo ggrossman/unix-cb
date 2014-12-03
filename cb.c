@@ -38,13 +38,13 @@ void add_recent ();
 
 /* Lengths of strings used in the program */
 
-#define MAXINPUT 256		/* Maximum length of any input */
-#define MAXID 15		/* Maximum length of a user ID */
-#define MAXHANDLE 33		/* Maximum length of a handle */
-#define MAXMSG 256		/* Maximum length of a message */
-#define MAXFMT 64		/* Maximum length of a format string */
-#define MAXHOST 64		/* Maximum length of a hostname */
-#define MAXPW 8			/* Maximum length of a password */
+#define MAXINPUT 256            /* Maximum length of any input */
+#define MAXID 15                /* Maximum length of a user ID */
+#define MAXHANDLE 33            /* Maximum length of a handle */
+#define MAXMSG 256              /* Maximum length of a message */
+#define MAXFMT 64               /* Maximum length of a format string */
+#define MAXHOST 64              /* Maximum length of a hostname */
+#define MAXPW 8                 /* Maximum length of a password */
 
 /* Size of output and stopped outut buffers */
 
@@ -61,12 +61,12 @@ void add_recent ();
 
 /* Telnet control sequence processing */
 
-#define TS_NONE	0
-#define TS_IAC	1
-#define TS_WILL	2
-#define TS_WONT	3
-#define TS_DO	4
-#define TS_DONT	5
+#define TS_NONE 0
+#define TS_IAC  1
+#define TS_WILL 2
+#define TS_WONT 3
+#define TS_DO   4
+#define TS_DONT 5
 
 /* Character-oriented queue for output buffers.
    When it overflows, it "eats" the old data line by line. */
@@ -119,11 +119,11 @@ struct slot {
     char   *temp;
     char    hostname[MAXHOST];
             time_t last_typed;
-unsigned    on:             1,	/* Set if user is logged in and active */
+unsigned    on:             1,  /* Set if user is logged in and active */
             wrap:           1,  /* Set if word wrap is on */
             lurk:           1,  /* Set if user is "lurking" */
             stopped:        1,  /* Set if incoming input is stopped */
-            spy:            1,	/* Set if user can spy */
+            spy:            1,  /* Set if user can spy */
             gotcr:          1,  /* Set if CR was received */
             echo:           1,  /* Set if input echos back to user */
             wstop:          1;  /* Set if writing to stop queue */
@@ -182,10 +182,10 @@ char   *s;
     register int    i = 0;
 
     while (*s)
-	if (isdigit (*s))
-	    i = 10 * i + *s++ - '0';
-	else
-	    return (-1);
+        if (isdigit (*s))
+            i = 10 * i + *s++ - '0';
+        else
+            return (-1);
     return i;
 }
 
@@ -199,21 +199,21 @@ char   *id;
     int     i;
 
     if (!id[0])
-	return NULL;
+        return NULL;
 
     if ((i = xatoi (id)) != -1) {
-	if (i < 0 || i >= numslots)
-	    return NULL;
-	sp = slotbase + i;
-	if (sp -> on)
-	    return (sp -> lurk && !slot -> spy) ? NULL : sp;
-	else
-	    return NULL;
+        if (i < 0 || i >= numslots)
+            return NULL;
+        sp = slotbase + i;
+        if (sp -> on)
+            return (sp -> lurk && !slot -> spy) ? NULL : sp;
+        else
+            return NULL;
     }
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp -> on && !strcmp (sp -> acct.id, id))
-	    return (sp -> lurk && !slot -> spy) ? NULL : sp;
+        if (sp -> on && !strcmp (sp -> acct.id, id))
+            return (sp -> lurk && !slot -> spy) ? NULL : sp;
 
     return NULL;
 }
@@ -228,16 +228,16 @@ struct account *acct;
     long    pos;
 
     if ((fp = fopen ("cb.accounts", "rb")) == NULL)
-	return - 1;
+        return - 1;
 
     pos = 0;
 
     while (fread (acct, sizeof (struct account), 1, fp)) {
-	if (!strcmp (id, acct -> id)) {
-	    fclose (fp);
-	    return pos;
-	}
-	pos += sizeof (struct account);
+        if (!strcmp (id, acct -> id)) {
+            fclose (fp);
+            return pos;
+        }
+        pos += sizeof (struct account);
     }
 
     fclose (fp);
@@ -256,18 +256,18 @@ char   *id;
     struct account  acct;
 
     if ((pos = read_user (id, &acct)) < 0)
-	return 0;
+        return 0;
 
     if ((fp = fopen ("cb.accounts", "r+b")) == NULL)
-	return 0;
+        return 0;
 
     fseek (fp, -(long) sizeof (struct account) , 2);
     if ((newlen = ftell (fp)) != pos) {
-	fread (&acct, sizeof acct, 1, fp);
-	if ((sp = slotname (acct.id)) != NULL)
-	    sp -> acct_pos = pos;
-	fseek (fp, pos, 0);
-	fwrite (&acct, sizeof acct, 1, fp);
+        fread (&acct, sizeof acct, 1, fp);
+        if ((sp = slotname (acct.id)) != NULL)
+            sp -> acct_pos = pos;
+        fseek (fp, pos, 0);
+        fwrite (&acct, sizeof acct, 1, fp);
     }
     ftruncate (fileno (fp), newlen);
     fclose (fp);
@@ -283,7 +283,7 @@ struct account *acct;
     long    pos;
 
     if ((fp = fopen ("cb.accounts", "ab")) == NULL)
-	return - 1;
+        return - 1;
     fseek (fp, 0L, 2);
     pos = ftell (fp);
     fwrite (acct, sizeof (struct account)  , 1, fp);
@@ -300,8 +300,8 @@ struct account *acct;
     FILE * fp;
 
     if ((fp = fopen ("cb.accounts", "r+b")) == NULL)
-	if ((fp = fopen ("cb.accounts", "wb")) == NULL)
-	    return 0;
+        if ((fp = fopen ("cb.accounts", "wb")) == NULL)
+            return 0;
     fseek (fp, pos, 0);
     fwrite (acct, sizeof (struct account)  , 1, fp);
     fclose (fp);
@@ -335,10 +335,10 @@ char   *s;
     char    ch;
 
     for (;;) {
-	ch = *s;
-	s = qnext (q, s);
-	if (ch == '\n')
-	    return s;
+        ch = *s;
+        s = qnext (q, s);
+        if (ch == '\n')
+            return s;
     }
 }
 
@@ -351,8 +351,8 @@ char    ch;
     *q -> qwrite = ch;
     q -> qwrite = qnext (q, q -> qwrite);
     if (q -> qwrite == q -> qread) {
-	q -> qoverflow = 1;
-	q -> qread = qnextline (q, q -> qread);
+        q -> qoverflow = 1;
+        q -> qread = qnextline (q, q -> qread);
     }
 }
 
@@ -378,7 +378,7 @@ void qdispose (q)
 struct queue   *q;
 {
     if (q -> qbase != NULL)
-	free (q -> qbase);
+        free (q -> qbase);
 }
 
 /* qcreate creates a queue. */
@@ -387,7 +387,7 @@ int qcreate (q, size)
 struct queue   *q;
 {
     if ((q -> qbase = malloc (size)) == NULL)
-	return 0;
+        return 0;
     q -> qsize = size;
     q -> qoverflow = 0;
     q -> qread = q -> qwrite = q -> qbase;
@@ -403,18 +403,18 @@ struct queue   *q;
     struct iovec    iov[2];
 
     if (!qempty (q)) {
-	if (q -> qread < q -> qwrite)
-	    q -> qread += write (sp - slotbase, q -> qread,
-		    q -> qwrite - q -> qread);
-	else {
-	    iov[0].iov_base = q -> qread;
-	    iov[0].iov_len = q -> qsize - (q -> qread - q -> qbase);
-	    iov[1].iov_base = q -> qbase;
-	    iov[1].iov_len = q -> qwrite - q -> qbase;
-	    q -> qread += writev (sp - slotbase, iov, 2);
-	    if (q -> qread >= q -> qbase + q -> qsize)
-		q -> qread -= q -> qsize;
-	}
+        if (q -> qread < q -> qwrite)
+            q -> qread += write (sp - slotbase, q -> qread,
+                    q -> qwrite - q -> qread);
+        else {
+            iov[0].iov_base = q -> qread;
+            iov[0].iov_len = q -> qsize - (q -> qread - q -> qbase);
+            iov[1].iov_base = q -> qbase;
+            iov[1].iov_len = q -> qwrite - q -> qbase;
+            q -> qread += writev (sp - slotbase, iov, 2);
+            if (q -> qread >= q -> qbase + q -> qsize)
+                q -> qread -= q -> qsize;
+        }
     }
 }
 
@@ -424,9 +424,9 @@ int qlength (q)
 struct queue   *q;
 {
     if (q -> qread > q -> qwrite)
-	return (q -> qwrite - q -> qbase) + q -> qsize - (q -> qread - q -> qbase);
+        return (q -> qwrite - q -> qbase) + q -> qsize - (q -> qread - q -> qbase);
     else
-	return (q -> qwrite - q -> qread);
+        return (q -> qwrite - q -> qread);
 }
 
 /* insert inserts a character into sp's output queue if output is not
@@ -437,10 +437,10 @@ struct slot *sp;
 char    ch;
 {
     if (ch == '\n')
-	insert (sp, '\r');
+        insert (sp, '\r');
     qinsert (sp -> wstop ? &sp -> stopq : &sp -> outq, ch);
     if (qlength (&sp -> outq) > sp -> outq.qsize * 3 / 4)
-	qwrite (sp, &sp -> outq);
+        qwrite (sp, &sp -> outq);
 }
 
 /*
@@ -465,7 +465,7 @@ void select_stop (sp)
 struct slot *sp;
 {
     if (sp -> stopped)
-	sp -> wstop = 1;
+        sp -> wstop = 1;
 }
 
 /* clear_stop deselects the stop queue for writing, resuming normal output */
@@ -500,7 +500,7 @@ char   *buf;
 int     n;
 {
     while (--n >= 0)
-	insert (sp, *buf++);
+        insert (sp, *buf++);
 }
 
 /* wrap_writech is similar to writech but supports word wrap */
@@ -513,33 +513,33 @@ char    ch;
             buf[MAXWIDTH + 1];
 
     if (ch == '\n') {
-	insert_buf (sp, sp -> wrap_base, sp -> wrap_ptr - sp -> wrap_base);
-	insert (sp, '\n');
-	sp -> wrap_ptr = sp -> wrap_base;
+        insert_buf (sp, sp -> wrap_base, sp -> wrap_ptr - sp -> wrap_base);
+        insert (sp, '\n');
+        sp -> wrap_ptr = sp -> wrap_base;
     }
     else
-	if (isprint (ch)) {
-	    *sp -> wrap_ptr++ = ch;
-	    if (sp -> wrap_ptr - sp -> wrap_base == sp -> acct.width - 1) {
-		for (space = sp -> wrap_ptr; space != sp -> wrap_base; space--)
-		    if (isspace (*space)) {
-			insert_buf (sp, sp -> wrap_base,
-				    space - sp -> wrap_base);
-			insert (sp, '\n');
-			*sp -> wrap_ptr = '\0';
-			strcpy (buf, space + 1);
-			strcpy (sp -> wrap_base, "  ");
-			strcat (sp -> wrap_base, buf);
-			sp -> wrap_ptr = sp -> wrap_base +
-			                 strlen (sp -> wrap_base);
-			return;
-		    }
-		insert_buf (sp, sp -> wrap_base,
-			    sp -> wrap_ptr - sp -> wrap_base);
-		insert (sp, '\n');
-		sp -> wrap_ptr = sp -> wrap_base;
-	    }
-	}
+        if (isprint (ch)) {
+            *sp -> wrap_ptr++ = ch;
+            if (sp -> wrap_ptr - sp -> wrap_base == sp -> acct.width - 1) {
+                for (space = sp -> wrap_ptr; space != sp -> wrap_base; space--)
+                    if (isspace (*space)) {
+                        insert_buf (sp, sp -> wrap_base,
+                                    space - sp -> wrap_base);
+                        insert (sp, '\n');
+                        *sp -> wrap_ptr = '\0';
+                        strcpy (buf, space + 1);
+                        strcpy (sp -> wrap_base, "  ");
+                        strcat (sp -> wrap_base, buf);
+                        sp -> wrap_ptr = sp -> wrap_base +
+                                         strlen (sp -> wrap_base);
+                        return;
+                    }
+                insert_buf (sp, sp -> wrap_base,
+                            sp -> wrap_ptr - sp -> wrap_base);
+                insert (sp, '\n');
+                sp -> wrap_ptr = sp -> wrap_base;
+            }
+        }
 }
 
 /* writech writes a character to slot sp */
@@ -549,9 +549,9 @@ struct slot *sp;
 char    ch;
 {
     if (sp -> wrap)
-	wrap_writech (sp, ch);
+        wrap_writech (sp, ch);
     else
-	insert (sp, ch);
+        insert (sp, ch);
 }
 
 /* writestr writes a string to slot sp */
@@ -561,7 +561,7 @@ struct slot *sp;
 char   *s;
 {
     while (*s)
-	writech (sp, *s++);
+        writech (sp, *s++);
 }
 
 /* writeerr writes an error message before disconnection */
@@ -580,7 +580,7 @@ struct slot *sp;
 int     i;
 {
     if (i >= 10)
-	writeint (sp, i / 10);
+        writeint (sp, i / 10);
     writech (sp, i % 10 + '0');
 }
 
@@ -590,10 +590,10 @@ void writetwodig (sp, i)
 struct slot *sp;
 {
     if (i >= 100)
-	writeint (sp, i);
+        writeint (sp, i);
     else {
-	writech (sp, i / 10 + '0');
-	writech (sp, i % 10 + '0');
+        writech (sp, i / 10 + '0');
+        writech (sp, i % 10 + '0');
     }
 }
 
@@ -621,8 +621,8 @@ int alloctemp (sp, size)
 struct slot *sp;
 {
     if ((sp -> temp = malloc (size)) == NULL) {
-	writestr (sp, "Insufficient memory.\n");
-	return 0;
+        writestr (sp, "Insufficient memory.\n");
+        return 0;
     }
     return 1;
 }
@@ -651,20 +651,20 @@ struct slot *sp;
     qdispose (&sp -> stopq);
 
     if (sp -> on) {
-	add_recent (sp);
-	sp -> on = 0;
-	for (sq = slotbase; sq < slotbase + numslots; sq++) {
-	    FD_CLR (sp - slotbase, &sq -> squelch);
-	    FD_CLR (sp - slotbase, &sq -> reverse);
-	}
-	if (sp -> acct_pos != -1)
-	    write_user (sp -> acct_pos, &sp -> acct);
+        add_recent (sp);
+        sp -> on = 0;
+        for (sq = slotbase; sq < slotbase + numslots; sq++) {
+            FD_CLR (sp - slotbase, &sq -> squelch);
+            FD_CLR (sp - slotbase, &sq -> reverse);
+        }
+        if (sp -> acct_pos != -1)
+            write_user (sp -> acct_pos, &sp -> acct);
     }
 
     if (sp -> cleanup != NULL)
-	sp -> cleanup ();
+        sp -> cleanup ();
     if (sp -> temp != NULL)
-	freetemp (slot);
+        freetemp (slot);
 
     FD_CLR (sp - slotbase, &used);
     close (sp - slotbase);
@@ -674,10 +674,10 @@ void transmit (sp)
 struct slot *sp;
 {
     if (!qempty (&sp -> outq))
-	qwrite (sp, &sp -> outq);
+        qwrite (sp, &sp -> outq);
 
     if (qempty (&sp -> outq) && !qempty (&sp -> stopq) && !sp -> stopped)
-	qwrite (sp, &sp -> stopq);
+        qwrite (sp, &sp -> stopq);
 }
 
 void readid2 (id)
@@ -686,14 +686,14 @@ char   *id;
     struct slot *sp;
 
     if (!id[0]) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
 
     if ((sp = slotname (id)) == NULL) {
-	writestr (slot, "User not logged in.\n");
-	setread (sendpub, MAXMSG);
-	return;
+        writestr (slot, "User not logged in.\n");
+        setread (sendpub, MAXMSG);
+        return;
     }
 
     slot -> dispid (sp);
@@ -719,49 +719,49 @@ char    ch;
     static char lc2[] = ")]}>";
 
     switch (ch) {
-	case '%': 
-	    writech (con, '%');
-	    break;
-	case 's': 
-	    writetwodig (con, about - slotbase);
-	    break;
-	case 'S': 
-	    writeint (con, about - slotbase);
-	    break;
-	case 'c': 
-	    if (about -> acct.chan == con -> acct.chan || con -> spy ||
-		    about -> acct.listed || about -> acct.chan == 1)
-		writetwodig (con, about -> acct.chan);
-	    else
-		writestr (con, "**");
-	    break;
-	case 'C': 
-	    if (about -> acct.chan == con -> acct.chan || con -> spy ||
-		    about -> acct.listed || about -> acct.chan == 1)
-		writeint (con, about -> acct.chan);
-	    else
-		writech (con, '*');
-	    break;
-	case '<': 
-	    writech (con, lc1[about -> acct.level]);
-	    break;
-	case '>': 
-	    writech (con, lc2[about -> acct.level]);
-	    break;
-	case 'u': 
-	    writestr (con, about -> acct.id);
-	    break;
-	case 'h': 
-	    writestr (con, about -> acct.handle);
-	    break;
-	case '$': 
-	    writech (con, levels[about -> acct.level]);
-	    break;
-	case '@': 
-	    writestr (con, about -> hostname);
-	    break;
-	default: 
-	    return 0;
+        case '%': 
+            writech (con, '%');
+            break;
+        case 's': 
+            writetwodig (con, about - slotbase);
+            break;
+        case 'S': 
+            writeint (con, about - slotbase);
+            break;
+        case 'c': 
+            if (about -> acct.chan == con -> acct.chan || con -> spy ||
+                    about -> acct.listed || about -> acct.chan == 1)
+                writetwodig (con, about -> acct.chan);
+            else
+                writestr (con, "**");
+            break;
+        case 'C': 
+            if (about -> acct.chan == con -> acct.chan || con -> spy ||
+                    about -> acct.listed || about -> acct.chan == 1)
+                writeint (con, about -> acct.chan);
+            else
+                writech (con, '*');
+            break;
+        case '<': 
+            writech (con, lc1[about -> acct.level]);
+            break;
+        case '>': 
+            writech (con, lc2[about -> acct.level]);
+            break;
+        case 'u': 
+            writestr (con, about -> acct.id);
+            break;
+        case 'h': 
+            writestr (con, about -> acct.handle);
+            break;
+        case '$': 
+            writech (con, levels[about -> acct.level]);
+            break;
+        case '@': 
+            writestr (con, about -> hostname);
+            break;
+        default: 
+            return 0;
     }
     return 1;
 }
@@ -780,69 +780,69 @@ int     typ;
 
     s = sp -> acct.msgfmt;
     while (*s) {
-	if (*s == '%')
-	    switch (*++s) {
-		case '\\': 
-		    writech (sp, '\\');
-		    break;
-		case '_': 
-		    writech (sp, '_');
-		    break;
-		case 'm': 
-		    nlcount = 0;
-		    while (*msg) {
-			if (*msg == slot -> acct.nlchar &&
-				sp -> acct.newlines && nlcount < MAXNL) {
-			    writestr (sp, "\n  ");
-			    nlcount++;
-			}
-			else
-			    writech (sp, *msg);
-			msg++;
-		    }
-		    break;
-		default: 
-		    if (shared_spec (sp, slot, *s))
-			break;
-		    writech (sp, '%');
-		    if (!*s)
-			s--;
-		    else
-			writech (slot, *s);
-	    }
-	else
-	    if (*s == '_') {
-		t = index (++s, '_');
-		if (typ == 2) {
-		    if (t != NULL)
-			*t = '\0';
-		    writestr (sp, s);
-		    if (t != NULL)
-			*t = '_';
-		}
-		if (t == NULL)
-		    break;
-		else
-		    s = t;
-	    }
-	    else
-		if (*s == '\\') {
-		    t = index (++s, '\\');
-		    if (typ == 1) {
-			if (t != NULL)
-			    *t = '\0';
-			writestr (sp, s);
-			if (t != NULL)
-			    *t = '\\';
-		    }
-		    if (t == NULL)
-			break;
-		    else
-			s = t;
-		}
-		else
-		    writech (sp, *s);
-	s++;
+        if (*s == '%')
+            switch (*++s) {
+                case '\\': 
+                    writech (sp, '\\');
+                    break;
+                case '_': 
+                    writech (sp, '_');
+                    break;
+                case 'm': 
+                    nlcount = 0;
+                    while (*msg) {
+                        if (*msg == slot -> acct.nlchar &&
+                                sp -> acct.newlines && nlcount < MAXNL) {
+                            writestr (sp, "\n  ");
+                            nlcount++;
+                        }
+                        else
+                            writech (sp, *msg);
+                        msg++;
+                    }
+                    break;
+                default: 
+                    if (shared_spec (sp, slot, *s))
+                        break;
+                    writech (sp, '%');
+                    if (!*s)
+                        s--;
+                    else
+                        writech (slot, *s);
+            }
+        else
+            if (*s == '_') {
+                t = index (++s, '_');
+                if (typ == 2) {
+                    if (t != NULL)
+                        *t = '\0';
+                    writestr (sp, s);
+                    if (t != NULL)
+                        *t = '_';
+                }
+                if (t == NULL)
+                    break;
+                else
+                    s = t;
+            }
+            else
+                if (*s == '\\') {
+                    t = index (++s, '\\');
+                    if (typ == 1) {
+                        if (t != NULL)
+                            *t = '\0';
+                        writestr (sp, s);
+                        if (t != NULL)
+                            *t = '\\';
+                    }
+                    if (t == NULL)
+                        break;
+                    else
+                        s = t;
+                }
+                else
+                    writech (sp, *s);
+        s++;
     }
     writech (sp, '\n');
     clear_stop (sp);
@@ -868,10 +868,10 @@ struct slot *sp;
     recent_users[recent_tail].login_time = sp -> login_time;
     time (&recent_users[recent_tail].logout_time);
     if (++recent_tail == MAX_RECENT)
-	recent_tail = 0;
+        recent_tail = 0;
     if (recent_tail == recent_head)
-	if (++recent_head == MAX_RECENT)
-	    recent_head = 0;
+        if (++recent_head == MAX_RECENT)
+            recent_head = 0;
 }
 
 void list_recent () {
@@ -879,22 +879,22 @@ void list_recent () {
     char   *s;
 
     if ((i = recent_head) == recent_tail)
-	writestr (slot, "Nobody has been online\n");
+        writestr (slot, "Nobody has been online\n");
     else
-	while (i != recent_tail) {
-	    s = ctime (&recent_users[i].login_time);
-	    s[24] = '\0';
-	    writestr (slot, s);
-	    writestr (slot, " to ");
-	    s = ctime (&recent_users[i].logout_time);
-	    s[24] = '\0';
-	    writestr (slot, s);
-	    writestr (slot, "   ");
-	    writestr (slot, recent_users[i].id);
-	    writech (slot, '\n');
-	    if (++i == MAX_RECENT)
-		i = 0;
-	}
+        while (i != recent_tail) {
+            s = ctime (&recent_users[i].login_time);
+            s[24] = '\0';
+            writestr (slot, s);
+            writestr (slot, " to ");
+            s = ctime (&recent_users[i].logout_time);
+            s[24] = '\0';
+            writestr (slot, s);
+            writestr (slot, "   ");
+            writestr (slot, recent_users[i].id);
+            writech (slot, '\n');
+            if (++i == MAX_RECENT)
+                i = 0;
+        }
 }
 
 /* These are the implementations for the various commands. */
@@ -905,42 +905,42 @@ void active () {
     int     first = 1;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp -> on) {
-	    if (sp -> lurk && !slot -> spy)
-		continue;
-	    s = slot -> acct.activefmt;
-	    while (*s) {
-		if (*s == '%')
-		    switch (*++s) {
-			case 't': 
-			    if (sp != slot && sp -> stopped)
-				writestr (slot, " (typing)");
-			    if (slot -> acct.level >= 2) {
-				if (sp -> lurk)
-				    writestr (slot, " {lurk}");
-				if (sp -> spy)
-				    writestr (slot, " <spy>");
-			    }
-			    break;
-			default: 
-			    if (shared_spec (slot, sp, *s))
-				break;
-			    writech (slot, '%');
-			    if (!*s)
-				s--;
-			    else
-				writech (slot, *s);
-		    }
-		else
-		    writech (slot, *s);
-		s++;
-	    }
-	    writech (slot, '\n');
-	    first = 0;
-	}
+        if (sp -> on) {
+            if (sp -> lurk && !slot -> spy)
+                continue;
+            s = slot -> acct.activefmt;
+            while (*s) {
+                if (*s == '%')
+                    switch (*++s) {
+                        case 't': 
+                            if (sp != slot && sp -> stopped)
+                                writestr (slot, " (typing)");
+                            if (slot -> acct.level >= 2) {
+                                if (sp -> lurk)
+                                    writestr (slot, " {lurk}");
+                                if (sp -> spy)
+                                    writestr (slot, " <spy>");
+                            }
+                            break;
+                        default: 
+                            if (shared_spec (slot, sp, *s))
+                                break;
+                            writech (slot, '%');
+                            if (!*s)
+                                s--;
+                            else
+                                writech (slot, *s);
+                    }
+                else
+                    writech (slot, *s);
+                s++;
+            }
+            writech (slot, '\n');
+            first = 0;
+        }
 
     if (first)
-	writestr (slot, "Nobody currently online\n");
+        writestr (slot, "Nobody currently online\n");
 }
 
 void typing () {
@@ -948,21 +948,21 @@ void typing () {
     int     first = 1;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp != slot && sp -> on && sp -> stopped) {
-	    if (sp -> lurk && !slot -> spy)
-		continue;
-	    if (first) {
-		first = 0;
-		writestr (slot, "Users currently typing:\n");
-	    }
-	    writestr (slot, "  ");
-	    writestr (slot, sp -> acct.id);
-	    writech (slot, '/');
-	    writestr (slot, sp -> acct.handle);
-	    writech (slot, '\n');
-	}
+        if (sp != slot && sp -> on && sp -> stopped) {
+            if (sp -> lurk && !slot -> spy)
+                continue;
+            if (first) {
+                first = 0;
+                writestr (slot, "Users currently typing:\n");
+            }
+            writestr (slot, "  ");
+            writestr (slot, sp -> acct.id);
+            writech (slot, '/');
+            writestr (slot, sp -> acct.handle);
+            writech (slot, '\n');
+        }
     if (first)
-	writestr (slot, "Nobody currently typing\n");
+        writestr (slot, "Nobody currently typing\n");
 }
 
 void operact (from, to, msg)
@@ -973,25 +973,25 @@ char   *msg;
     struct slot *sp;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp != from && sp -> on && sp -> acct.level >= 2) {
-	    select_stop (sp);
-	    select_wrap (sp);
-	    writestr (sp, "* ");
-	    writestr (sp, from -> acct.id);
-	    writech (sp, '/');
-	    writestr (sp, from -> acct.handle);
-	    writech (sp, ' ');
-	    writestr (sp, msg);
-	    if (to != NULL) {
-		writech (sp, ' ');
-		writestr (sp, to -> acct.id);
-		writech (sp, '/');
-		writestr (sp, to -> acct.handle);
-	    }
-	    writech (sp, '\n');
-	    clear_stop (sp);
-	    clear_wrap (sp);
-	}
+        if (sp != from && sp -> on && sp -> acct.level >= 2) {
+            select_stop (sp);
+            select_wrap (sp);
+            writestr (sp, "* ");
+            writestr (sp, from -> acct.id);
+            writech (sp, '/');
+            writestr (sp, from -> acct.handle);
+            writech (sp, ' ');
+            writestr (sp, msg);
+            if (to != NULL) {
+                writech (sp, ' ');
+                writestr (sp, to -> acct.id);
+                writech (sp, '/');
+                writestr (sp, to -> acct.handle);
+            }
+            writech (sp, '\n');
+            clear_stop (sp);
+            clear_wrap (sp);
+        }
 }
 
 void paabout (slot, msg, chan)
@@ -1002,23 +1002,23 @@ int     chan;
     struct slot *sp;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp -> on) {
-	    if (chan && (sp == slot || sp -> acct.chan != slot -> acct.chan))
-		continue;
-	    select_stop (sp);
-	    select_wrap (sp);
-	    writestr (sp, "-- #");
-	    writeint (sp, slot - slotbase);
-	    writech (sp, ' ');
-	    writestr (sp, msg);
-	    writestr (sp, ": ");
-	    writestr (sp, slot -> acct.id);
-	    writech (sp, '/');
-	    writestr (sp, slot -> acct.handle);
-	    writech (sp, '\n');
-	    clear_stop (sp);
-	    clear_wrap (sp);
-	}
+        if (sp -> on) {
+            if (chan && (sp == slot || sp -> acct.chan != slot -> acct.chan))
+                continue;
+            select_stop (sp);
+            select_wrap (sp);
+            writestr (sp, "-- #");
+            writeint (sp, slot - slotbase);
+            writech (sp, ' ');
+            writestr (sp, msg);
+            writestr (sp, ": ");
+            writestr (sp, slot -> acct.id);
+            writech (sp, '/');
+            writestr (sp, slot -> acct.handle);
+            writech (sp, '\n');
+            clear_stop (sp);
+            clear_wrap (sp);
+        }
 }
 
 void kickoff2 (sp)
@@ -1049,28 +1049,28 @@ char   *text;
     int     chan;
 
     if (text[0]) {
-	chan = atoi (text);
-	if (chan >= 1 && chan <= 99) {
-	    if (chan >= 91 && chan <= 99) {
-		if (user9x[chan - 91] > chan - 91) {
-		    writestr (slot, "Channel busy.\n");
-		    setread (sendpub, MAXMSG);
-		    return;
-		}
-		else
-		    user9x[chan - 91]++;
-	    }
-	    if (slot -> acct.chan >= 91 && slot -> acct.chan <= 99)
-		user9x[slot -> acct.chan - 91]--;
-	    paabout (slot, "Left Channel", 1);
-	    slot -> acct.chan = chan;
-	    writestr (slot, "Channel changed to ");
-	    writestr (slot, text);
-	    writestr (slot, ".\n");
-	    paabout (slot, "Joined Channel", 1);
-	}
-	else
-	    writestr (slot, "Channel must be a number from 1 to 99.\n");
+        chan = atoi (text);
+        if (chan >= 1 && chan <= 99) {
+            if (chan >= 91 && chan <= 99) {
+                if (user9x[chan - 91] > chan - 91) {
+                    writestr (slot, "Channel busy.\n");
+                    setread (sendpub, MAXMSG);
+                    return;
+                }
+                else
+                    user9x[chan - 91]++;
+            }
+            if (slot -> acct.chan >= 91 && slot -> acct.chan <= 99)
+                user9x[slot -> acct.chan - 91]--;
+            paabout (slot, "Left Channel", 1);
+            slot -> acct.chan = chan;
+            writestr (slot, "Channel changed to ");
+            writestr (slot, text);
+            writestr (slot, ".\n");
+            paabout (slot, "Joined Channel", 1);
+        }
+        else
+            writestr (slot, "Channel must be a number from 1 to 99.\n");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1086,10 +1086,10 @@ char   *msg;
     struct slot *sp;
 
     if (msg[0])
-	for (sp = slotbase; sp < slotbase + numslots; sp++)
-	    if (sp -> on && !squelched (sp, slot) && !reversed (slot, sp) &&
-		    !sp -> acct.nostat)
-		writemsg (sp, msg, 2);
+        for (sp = slotbase; sp < slotbase + numslots; sp++)
+            if (sp -> on && !squelched (sp, slot) && !reversed (slot, sp) &&
+                    !sp -> acct.nostat)
+                writemsg (sp, msg, 2);
 
     setread (sendpub, MAXMSG);
 }
@@ -1104,26 +1104,26 @@ char   *handle; {
     struct slot *sp;
     if (handle[0]) {
     /* Inform @'s and %'s of the handle change */
-	for (sp = slotbase; sp < slotbase + numslots; sp++)
-	    if (sp != slot && sp -> on && sp -> acct.level >= 2) {
-		select_stop (sp);
-		select_wrap (sp);
-		writestr (sp, "* ");
-		writestr (sp, slot -> acct.id);
-		writech (sp, '/');
-		writestr (sp, slot -> acct.handle);
-		writestr (sp, " is now ");
-		writestr (sp, slot -> acct.id);
-		writech (sp, '/');
-		writestr (sp, handle);
-		writech (sp, '\n');
-		clear_wrap (sp);
-		clear_stop (sp);
-	    }
-	strcpy (slot -> acct.handle, handle);
-	writestr (slot, "Handle changed to ");
-	writestr (slot, handle);
-	writestr (slot, ".\n");
+        for (sp = slotbase; sp < slotbase + numslots; sp++)
+            if (sp != slot && sp -> on && sp -> acct.level >= 2) {
+                select_stop (sp);
+                select_wrap (sp);
+                writestr (sp, "* ");
+                writestr (sp, slot -> acct.id);
+                writech (sp, '/');
+                writestr (sp, slot -> acct.handle);
+                writestr (sp, " is now ");
+                writestr (sp, slot -> acct.id);
+                writech (sp, '/');
+                writestr (sp, handle);
+                writech (sp, '\n');
+                clear_wrap (sp);
+                clear_stop (sp);
+            }
+        strcpy (slot -> acct.handle, handle);
+        writestr (slot, "Handle changed to ");
+        writestr (slot, handle);
+        writestr (slot, ".\n");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1140,28 +1140,28 @@ char   *msg;
                *ss;
 
     if ((sp = slotname (slot -> pmail)) == NULL)
-	writestr (slot, "User no longer logged in.\n");
+        writestr (slot, "User no longer logged in.\n");
     else
-	if (msg[0]) {
-	    if (!squelched (sp, slot) && !reversed (slot, sp))
-		writemsg (sp, msg, 1);
-	/* Send p-mail msg to spying sysops */
-	    for (ss = slotbase; ss < slotbase + numslots; ss++)
-		if (ss -> on && ss -> spy && ss != sp && ss != slot) {
-		    select_wrap (ss);
-		    select_stop (ss);
-		    writestr (ss, "* ");
-		    writestr (ss, slot -> acct.id);
-		    writestr (ss, " to ");
-		    writestr (ss, sp -> acct.id);
-		    writestr (ss, ": ");
-		    writestr (ss, msg);
-		    writech (ss, '\n');
-		    clear_wrap (ss);
-		    clear_stop (ss);
-		}
-	    writestr (slot, "Message sent.\n");
-	}
+        if (msg[0]) {
+            if (!squelched (sp, slot) && !reversed (slot, sp))
+                writemsg (sp, msg, 1);
+        /* Send p-mail msg to spying sysops */
+            for (ss = slotbase; ss < slotbase + numslots; ss++)
+                if (ss -> on && ss -> spy && ss != sp && ss != slot) {
+                    select_wrap (ss);
+                    select_stop (ss);
+                    writestr (ss, "* ");
+                    writestr (ss, slot -> acct.id);
+                    writestr (ss, " to ");
+                    writestr (ss, sp -> acct.id);
+                    writestr (ss, ": ");
+                    writestr (ss, msg);
+                    writech (ss, '\n');
+                    clear_wrap (ss);
+                    clear_stop (ss);
+                }
+            writestr (slot, "Message sent.\n");
+        }
     slot -> pmail[0] = '\0';
     setread (sendpub, MAXMSG);
 }
@@ -1181,9 +1181,9 @@ void pmail () {
 
 void quit3 () {
     if (*slot -> temp != 'g')
-	paabout (slot, "Logged off", 0);
+        paabout (slot, "Logged off", 0);
     else
-	operact (slot, NULL, "logged off silently");
+        operact (slot, NULL, "logged off silently");
     transmit (slot);
     collapse (slot);
 }
@@ -1192,10 +1192,10 @@ void quit2 (yn)
 char   *yn;
 {
     if (yn[0] == 'y')
-	quit3 ();
+        quit3 ();
     else {
-	setread (sendpub, MAXMSG);
-	freetemp (slot);
+        setread (sendpub, MAXMSG);
+        freetemp (slot);
     }
 }
 
@@ -1205,18 +1205,18 @@ char    type;
     struct slot *sp;
 
     if (!alloctemp (slot, sizeof (char))) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
 
     *slot -> temp = type;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (!strcmp (sp -> pmail, slot -> acct.id)) {
-	    writestr (slot, "Someone is sending you a private message.\n");
-	    writestr (slot, "Are you sure you want to quit? ");
-	    setread (quit2, 2);
-	}
+        if (!strcmp (sp -> pmail, slot -> acct.id)) {
+            writestr (slot, "Someone is sending you a private message.\n");
+            writestr (slot, "Are you sure you want to quit? ");
+            setread (quit2, 2);
+        }
 
     quit3 ();
 }
@@ -1233,14 +1233,14 @@ void squelch2 (sp)
 struct slot *sp;
 {
     if (!FD_ISSET (sp - slotbase, &slot -> squelch)) {
-	FD_SET (sp - slotbase, &slot -> squelch);
-	writestr (slot, "User squelched.\n");
-	operact (slot, sp, "squelches");
+        FD_SET (sp - slotbase, &slot -> squelch);
+        writestr (slot, "User squelched.\n");
+        operact (slot, sp, "squelches");
     }
     else {
-	FD_CLR (sp - slotbase, &slot -> squelch);
-	writestr (slot, "User unsquelched.\n");
-	operact (slot, sp, "unsquelches");
+        FD_CLR (sp - slotbase, &slot -> squelch);
+        writestr (slot, "User unsquelched.\n");
+        operact (slot, sp, "unsquelches");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1254,14 +1254,14 @@ void reverse2 (sp)
 struct slot *sp;
 {
     if (!FD_ISSET (sp - slotbase, &slot -> reverse)) {
-	FD_SET (sp - slotbase, &slot -> reverse);
-	writestr (slot, "User reversed.\n");
-	operact (slot, sp, "reverses");
+        FD_SET (sp - slotbase, &slot -> reverse);
+        writestr (slot, "User reversed.\n");
+        operact (slot, sp, "reverses");
     }
     else {
-	FD_CLR (sp - slotbase, &slot -> reverse);
-	writestr (slot, "User unreversed.\n");
-	operact (slot, sp, "unreverses");
+        FD_CLR (sp - slotbase, &slot -> reverse);
+        writestr (slot, "User unreversed.\n");
+        operact (slot, sp, "unreverses");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1329,12 +1329,12 @@ void change_fmt3 (fmt)
 char   *fmt;
 {
     if (!strcmp (fmt, "?"))
-	helpmsgfmt ();
+        helpmsgfmt ();
     else
-	if (*fmt) {
-	    strcpy (slot -> acct.msgfmt, fmt);
-	    writestr (slot, "Message format changed.\n");
-	}
+        if (*fmt) {
+            strcpy (slot -> acct.msgfmt, fmt);
+            writestr (slot, "Message format changed.\n");
+        }
     setread (sendpub, MAXMSG);
 }
 
@@ -1342,12 +1342,12 @@ void change_fmt4 (fmt)
 char   *fmt;
 {
     if (!strcmp (fmt, "?"))
-	helpactivefmt ();
+        helpactivefmt ();
     else
-	if (*fmt) {
-	    strcpy (slot -> acct.activefmt, fmt);
-	    writestr (slot, "Active format changed.\n");
-	}
+        if (*fmt) {
+            strcpy (slot -> acct.activefmt, fmt);
+            writestr (slot, "Active format changed.\n");
+        }
     setread (sendpub, MAXMSG);
 }
 
@@ -1355,21 +1355,21 @@ void change_fmt2 (maq)
 char   *maq;
 {
     switch (*maq) {
-	case 'm': 
-	    writestr (slot, "Your message format is:\n");
-	    writestr (slot, slot -> acct.msgfmt);
-	    writestr (slot, "\nEnter new format, or CR to keep. ? for help\n");
-	    setread (change_fmt3, MAXFMT);
-	    break;
-	case 'a': 
-	    writestr (slot, "Your active format is:\n");
-	    writestr (slot, slot -> acct.activefmt);
-	    writestr (slot, "\nEnter new format, or CR to keep. ? for help\n");
-	    setread (change_fmt4, MAXFMT);
-	    break;
-	case 'q': 
-	    setread (sendpub, MAXMSG);
-	    break;
+        case 'm': 
+            writestr (slot, "Your message format is:\n");
+            writestr (slot, slot -> acct.msgfmt);
+            writestr (slot, "\nEnter new format, or CR to keep. ? for help\n");
+            setread (change_fmt3, MAXFMT);
+            break;
+        case 'a': 
+            writestr (slot, "Your active format is:\n");
+            writestr (slot, slot -> acct.activefmt);
+            writestr (slot, "\nEnter new format, or CR to keep. ? for help\n");
+            setread (change_fmt4, MAXFMT);
+            break;
+        case 'q': 
+            setread (sendpub, MAXMSG);
+            break;
     }
 }
 
@@ -1381,7 +1381,7 @@ void change_fmt () {
 void togglestat () {
     slot -> acct.nostat = !slot -> acct.nostat;
     writestr (slot, slot -> acct.nostat ? "Station messages off.\n" :
-	    "Station messages on.\n");
+            "Station messages on.\n");
 }
 
 void setwidth2 (buf)
@@ -1390,11 +1390,11 @@ char   *buf;
     int     i;
 
     if ((i = atoi (buf)) >= 20 && i <= MAXWIDTH) {
-	slot -> acct.width = i;
-	writestr (slot, "Screen width changed.\n");
+        slot -> acct.width = i;
+        writestr (slot, "Screen width changed.\n");
     }
     else
-	writestr (slot, "Value must be between 20 and 132.\n");
+        writestr (slot, "Value must be between 20 and 132.\n");
     setread (sendpub, MAXMSG);
 }
 
@@ -1409,29 +1409,29 @@ void setwidth () {
 void monitor () {
     slot -> acct.mon = !slot -> acct.mon;
     writestr (slot, slot -> acct.mon ? "Monitoring on\n" :
-	    "Monitoring off\n");
+            "Monitoring off\n");
 }
 
 void toggle_nl () {
     slot -> acct.newlines = !slot -> acct.newlines;
     writestr (slot, slot -> acct.newlines ? "Newlines on\n" :
-	    "Newlines off\n");
+            "Newlines off\n");
 }
 
 void toggle_list () {
     slot -> acct.listed = !slot -> acct.listed;
     writestr (slot, slot -> acct.listed ? "Channels listed\n" :
-	    "Channels unlisted\n");
+            "Channels unlisted\n");
 }
 
 void change_nl2 (ch)
 char   *ch;
 {
     if (*ch != '\0') {
-	slot -> acct.nlchar = *ch;
-	writestr (slot, "Newline character changed to ");
-	writech (slot, slot -> acct.nlchar);
-	writech (slot, '\n');
+        slot -> acct.nlchar = *ch;
+        writestr (slot, "Newline character changed to ");
+        writech (slot, slot -> acct.nlchar);
+        writech (slot, '\n');
     }
     setread (sendpub, MAXMSG);
 }
@@ -1448,17 +1448,17 @@ char   *msg;
 {
     struct slot *sp;
     if (msg[0]) {
-	for (sp = slotbase; sp != slotbase + numslots; sp++)
-	    if (sp -> on) {
-		select_stop (sp);
-		select_wrap (sp);
-		writestr (sp, "-- ");
-		writestr (sp, msg);
-		writech (sp, '\n');
-		clear_stop (sp);
-		clear_wrap (sp);
-	    }
-	writestr (slot, "Message sent.\n");
+        for (sp = slotbase; sp != slotbase + numslots; sp++)
+            if (sp -> on) {
+                select_stop (sp);
+                select_wrap (sp);
+                writestr (sp, "-- ");
+                writestr (sp, msg);
+                writech (sp, '\n');
+                clear_stop (sp);
+                clear_wrap (sp);
+            }
+        writestr (slot, "Message sent.\n");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1471,11 +1471,11 @@ void send_pa () {
 void change_pw4 (pw)
 char   *pw; {
     if (strcmp (pw, slot -> temp))
-	writestr (slot, "Passwords do not match.\n");
+        writestr (slot, "Passwords do not match.\n");
     else {
-	strcpy (slot -> acct.pw, pw);
-	writestr (slot, "Password changed.\n");
-	operact (slot, NULL, "changed password");
+        strcpy (slot -> acct.pw, pw);
+        writestr (slot, "Password changed.\n");
+        operact (slot, NULL, "changed password");
     }
     slot -> echo = 1;
     freetemp (slot);
@@ -1485,8 +1485,8 @@ char   *pw; {
 void change_pw3 (pw)
 char   *pw; {
     if (!alloctemp (slot, MAXPW)) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
     strcpy (slot -> temp, pw);
     writestr (slot, "Enter password again to verify: ");
@@ -1496,13 +1496,13 @@ char   *pw; {
 void change_pw2 (pw)
 char   *pw; {
     if (strcmp (pw, slot -> acct.pw)) {
-	writestr (slot, "Password incorrect.\n");
-	slot -> echo = 1;
-	setread (sendpub, MAXMSG);
+        writestr (slot, "Password incorrect.\n");
+        slot -> echo = 1;
+        setread (sendpub, MAXMSG);
     }
     else {
-	writestr (slot, "Enter new password: ");
-	setread (change_pw3, MAXPW);
+        writestr (slot, "Enter new password: ");
+        setread (change_pw3, MAXPW);
     }
 }
 
@@ -1526,9 +1526,9 @@ struct account *acct; {
     writestr (slot, "Channel: ");
     writeint (slot, acct -> chan);
     if (acct -> listed)
-	writestr (slot, " (listed)\n");
+        writestr (slot, " (listed)\n");
     else
-	writestr (slot, " (unlisted)\n");
+        writestr (slot, " (unlisted)\n");
     writestr (slot, "Message format: ");
     writestr (slot, acct -> msgfmt);
     writestr (slot, "\n");
@@ -1562,8 +1562,8 @@ struct slot *sp; {
     writestr (slot, s);
     secs -= sp -> last_typed;
     if (secs > 300) {
-	writestr (slot, " Idle for ");
-	writetime (slot, secs - 300);
+        writestr (slot, " Idle for ");
+        writetime (slot, secs - 300);
     }
     writech (slot, '\n');
     operact (slot, sp, "inquired about");
@@ -1581,22 +1581,22 @@ char   *id;
     struct slot *sp;
 
     if (id[0]) {
-	if ((sp = slotname (id)) != NULL) {
-	    if (delete_user (sp -> acct.id)) {
-		operact (slot, sp, "deletes");
-		writestr (sp, "Your account has been deleted.  Adios, pal.\n");
-		transmit (sp);
-		sp -> acct_pos = -1;/* Signal no user record */
-		collapse (sp);
-	    }
-	    else
-		writestr (slot, "Error deleting user.\n");
-	}
-	else
-	    if (delete_user (id))
-		writestr (slot, "User deleted.\n");
-	    else
-		writestr (slot, "No such user.\n");
+        if ((sp = slotname (id)) != NULL) {
+            if (delete_user (sp -> acct.id)) {
+                operact (slot, sp, "deletes");
+                writestr (sp, "Your account has been deleted.  Adios, pal.\n");
+                transmit (sp);
+                sp -> acct_pos = -1;/* Signal no user record */
+                collapse (sp);
+            }
+            else
+                writestr (slot, "Error deleting user.\n");
+        }
+        else
+            if (delete_user (id))
+                writestr (slot, "User deleted.\n");
+            else
+                writestr (slot, "No such user.\n");
     }
     setread (sendpub, MAXMSG);
 }
@@ -1608,22 +1608,22 @@ char   *id;
     struct slot *sp;
 
     if (id[0]) {
-	if ((sp = slotname (id)) != NULL) {
-	    dump_userinfo (&sp -> acct);
-	    writestr (slot, "Password: ");
-	    writestr (slot, sp -> acct.pw);
-	    writestr (slot, "\n");
-	}
-	else {
-	    if (read_user (id, &acct) < 0)
-		writestr (slot, "No such user.\n");
-	    else {
-		dump_userinfo (&acct);
-		writestr (slot, "Password: ");
-		writestr (slot, acct.pw);
-		writestr (slot, "\n");
-	    }
-	}
+        if ((sp = slotname (id)) != NULL) {
+            dump_userinfo (&sp -> acct);
+            writestr (slot, "Password: ");
+            writestr (slot, sp -> acct.pw);
+            writestr (slot, "\n");
+        }
+        else {
+            if (read_user (id, &acct) < 0)
+                writestr (slot, "No such user.\n");
+            else {
+                dump_userinfo (&acct);
+                writestr (slot, "Password: ");
+                writestr (slot, acct.pw);
+                writestr (slot, "\n");
+            }
+        }
     }
     setread (sendpub, MAXMSG);
 }
@@ -1638,20 +1638,20 @@ char   *lev;
     long    pos;
 
     if ((s = index (levels, *lev)) == NULL)
-	writestr (slot, "Not a level.\n");
+        writestr (slot, "Not a level.\n");
     else {
-	i = s - levels;
-	if ((sp = slotname (slot -> temp)) != NULL) {
-	    sp -> acct.level = i;
-	    write_user (sp -> acct_pos, &sp -> acct);
-	}
-	else
-	    if ((pos = read_user (slot -> temp, &acct)) < 0)
-		writestr (slot, "No such user.\n");
-	    else {
-		acct.level = i;
-		write_user (pos, &acct);
-	    }
+        i = s - levels;
+        if ((sp = slotname (slot -> temp)) != NULL) {
+            sp -> acct.level = i;
+            write_user (sp -> acct_pos, &sp -> acct);
+        }
+        else
+            if ((pos = read_user (slot -> temp, &acct)) < 0)
+                writestr (slot, "No such user.\n");
+            else {
+                acct.level = i;
+                write_user (pos, &acct);
+            }
     }
     freetemp (slot);
     setread (sendpub, MAXMSG);
@@ -1661,12 +1661,12 @@ void acc_chlevel (id)
 char   *id;
 {
     if (!id[0]) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
     if (!alloctemp (slot, MAXID)) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
     strcpy (slot -> temp, id);
     writestr (slot, "Level: ");
@@ -1678,15 +1678,15 @@ void list_users () {
     struct account  acct;
 
     if ((fp = fopen ("cb.accounts", "rb")) == NULL) {
-	writestr (slot, "Error opening cb.accounts.\n");
-	return;
+        writestr (slot, "Error opening cb.accounts.\n");
+        return;
     }
 
     while (fread (&acct, sizeof acct, 1, fp)) {
-	writestr (slot, acct.id);
-	writech (slot, '/');
-	writestr (slot, acct.handle);
-	writech (slot, '\n');
+        writestr (slot, acct.id);
+        writech (slot, '/');
+        writestr (slot, acct.handle);
+        writech (slot, '\n');
     }
 
     fclose (fp);
@@ -1696,22 +1696,22 @@ void accounting (ch)
 char   *ch;
 {
     switch (*ch) {
-	case 'd': 
-	    writestr (slot, "Who: ");
-	    setread (acc_deluser, MAXID);
-	    break;
-	case 'v': 
-	    writestr (slot, "Who: ");
-	    setread (acc_viewuser, MAXID);
-	    break;
-	case 'c': 
-	    writestr (slot, "Who: ");
-	    setread (acc_chlevel, MAXID);
-	    break;
-	case 'l': 
-	    list_users ();
-	default: 
-	    setread (sendpub, MAXMSG);
+        case 'd': 
+            writestr (slot, "Who: ");
+            setread (acc_deluser, MAXID);
+            break;
+        case 'v': 
+            writestr (slot, "Who: ");
+            setread (acc_viewuser, MAXID);
+            break;
+        case 'c': 
+            writestr (slot, "Who: ");
+            setread (acc_chlevel, MAXID);
+            break;
+        case 'l': 
+            list_users ();
+        default: 
+            setread (sendpub, MAXMSG);
     }
 }
 
@@ -1719,11 +1719,11 @@ void do_shutdown () {
     struct slot *sp;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp - slotbase != sock && FD_ISSET (sp - slotbase, &used)) {
-	    writestr (sp, "CB is shutting down.\n");
-	    transmit (sp);
-	    collapse (sp);
-	}
+        if (sp - slotbase != sock && FD_ISSET (sp - slotbase, &used)) {
+            writestr (sp, "CB is shutting down.\n");
+            transmit (sp);
+            collapse (sp);
+        }
     close (sock);
     free (slotbase);
     exit (0);
@@ -1733,11 +1733,11 @@ void _shutdown (yn)
 char   *yn;
 {
     if (*yn == 'y') {
-	operact (slot, NULL, "initiated shut down");
-	do_shutdown ();
+        operact (slot, NULL, "initiated shut down");
+        do_shutdown ();
     }
     else
-	setread (sendpub, MAXMSG);
+        setread (sendpub, MAXMSG);
 }
 
 struct motd_data {
@@ -1757,19 +1757,19 @@ char   *text;
 
     md = (struct motd_data *) slot -> temp;
     if (text[0] == '.' && text[1] == '\0') {
-	fclose (md -> fp);
-	writestr (slot, "Motd closed.  ");
-	writeint (slot, md -> line - 1);
-	writestr (slot, " lines written.\n");
-	freetemp (slot);
-	slot -> cleanup = NULL;
-	setread (sendpub, MAXMSG);
+        fclose (md -> fp);
+        writestr (slot, "Motd closed.  ");
+        writeint (slot, md -> line - 1);
+        writestr (slot, " lines written.\n");
+        freetemp (slot);
+        slot -> cleanup = NULL;
+        setread (sendpub, MAXMSG);
     }
     else {
-	fputs (text, md -> fp);
-	fputc ('\n', md -> fp);
-	writeint (slot, ++md -> line);
-	writestr (slot, ": ");
+        fputs (text, md -> fp);
+        fputc ('\n', md -> fp);
+        writeint (slot, ++md -> line);
+        writestr (slot, ": ");
     }
 }
 
@@ -1777,16 +1777,16 @@ void write_motd () {
     struct motd_data   *md;
 
     if (!alloctemp (slot, sizeof (struct motd_data))) {
-	setread (sendpub, MAXMSG);
-	return;
+        setread (sendpub, MAXMSG);
+        return;
     }
 
     md = (struct motd_data *) slot -> temp;
 
     if ((md -> fp = fopen ("cb.motd", "w")) == NULL) {
-	writestr (slot, "Error opening cb.motd\n");
-	freetemp (slot);
-	setread (sendpub, MAXMSG);
+        writestr (slot, "Error opening cb.motd\n");
+        freetemp (slot);
+        setread (sendpub, MAXMSG);
     }
 
     md -> line = 1;
@@ -1831,37 +1831,37 @@ void op_func2 (ars)
 char   *ars;
 {
     switch (*ars) {
-	case 'a': 
-	    writestr (slot, "<L>ist, <D>elete, <V>iew, <C>hange Level: ");
-	    setread (accounting, 2);
-	    break;
-	case 'i': 
-	    show_status ();
-	    break;
-	case 's': 
-	    writestr (slot, "This will shut down the CB simulator.\n");
-	    writestr (slot, "Are you sure? ");
-	    setread (_shutdown, 2);
-	    break;
-	case 'w': 
-	    write_motd ();
-	    break;
-	case 'p': 
-	    slot -> spy = !slot -> spy;
-	    writestr (slot, slot -> spy ? "Spy mode active.\n" :
-		    "Spy mode inactive.\n");
-	    setread (sendpub, MAXMSG);
-	    break;
-	default: 
-	    setread (sendpub, MAXMSG);
+        case 'a': 
+            writestr (slot, "<L>ist, <D>elete, <V>iew, <C>hange Level: ");
+            setread (accounting, 2);
+            break;
+        case 'i': 
+            show_status ();
+            break;
+        case 's': 
+            writestr (slot, "This will shut down the CB simulator.\n");
+            writestr (slot, "Are you sure? ");
+            setread (_shutdown, 2);
+            break;
+        case 'w': 
+            write_motd ();
+            break;
+        case 'p': 
+            slot -> spy = !slot -> spy;
+            writestr (slot, slot -> spy ? "Spy mode active.\n" :
+                    "Spy mode inactive.\n");
+            setread (sendpub, MAXMSG);
+            break;
+        default: 
+            setread (sendpub, MAXMSG);
     }
 }
 
 void off2 (char *yn) {
     if (yn[0] == 'y')
-	do_quit ('q');
+        do_quit ('q');
     else
-	setread (sendpub, MAXMSG);
+        setread (sendpub, MAXMSG);
 }
 
 void off () {
@@ -1938,17 +1938,17 @@ void help () {
             j;
     writestr (slot, "The following commands are available:\n");
     for (i = 0; i < MAXCMDS; i++)
-	if (cmds[i].level <= slot -> acct.level) {
-	    writech (slot, '/');
-	    writech (slot, cmds[i].ch);
-	    writestr (slot, "   ");
-	    writestr (slot, cmds[i].desc);
-	    if (slot -> acct.width == 80)
-		for (j = strlen (cmds[i].desc); j < 35; j++)
-		    writech (slot, ' ');
-	    else
-		writech (slot, '\n');
-	}
+        if (cmds[i].level <= slot -> acct.level) {
+            writech (slot, '/');
+            writech (slot, cmds[i].ch);
+            writestr (slot, "   ");
+            writestr (slot, cmds[i].desc);
+            if (slot -> acct.width == 80)
+                for (j = strlen (cmds[i].desc); j < 35; j++)
+                    writech (slot, ' ');
+            else
+                writech (slot, '\n');
+        }
     writech (slot, '\n');
 }
 
@@ -1956,14 +1956,14 @@ void secret2 (pw)
 char   *pw; {
     slot -> echo = 1;
     if (!strcmp (pw, SECRET_PW)) {
-	writestr (slot, "Access level changed.\n");
-	slot -> acct.level = 3;
-	setread (sendpub, MAXMSG);
+        writestr (slot, "Access level changed.\n");
+        slot -> acct.level = 3;
+        setread (sendpub, MAXMSG);
     }
     else {
-	writestr (slot, "Incorrect.\n");
-	transmit (slot);
-	collapse (slot);
+        writestr (slot, "Incorrect.\n");
+        transmit (slot);
+        collapse (slot);
     }
 }
 
@@ -1978,20 +1978,20 @@ char    ch; {
     int     i;
 
     if (ch == '|') {
-	secret ();
-	return;
+        secret ();
+        return;
     }
 
     if (ch == 's')
-	ch = 'a';		/* /s is same as /a */
+        ch = 'a';               /* /s is same as /a */
 
     for (i = 0; i < MAXCMDS; i++)
-	if (ch == cmds[i].ch) {
-	    if (cmds[i].level > slot -> acct.level)
-		break;
-	    cmds[i].func ();
-	    return;
-	}
+        if (ch == cmds[i].ch) {
+            if (cmds[i].level > slot -> acct.level)
+                break;
+            cmds[i].func ();
+            return;
+        }
     writestr (slot, "Invalid command, type /? for help.\n");
 }
 
@@ -2004,10 +2004,10 @@ char   *text;
     struct slot *sp;
 
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (sp -> on && !squelched (sp, slot) && !reversed (slot, sp) &&
-		(sp -> acct.chan == slot -> acct.chan ||
-		    (slot -> acct.chan == 1 && sp -> acct.mon)))
-	    writemsg (sp, text, 0);
+        if (sp -> on && !squelched (sp, slot) && !reversed (slot, sp) &&
+                (sp -> acct.chan == slot -> acct.chan ||
+                    (slot -> acct.chan == 1 && sp -> acct.mon)))
+            writemsg (sp, text, 0);
 }
 
 void read_motd () {
@@ -2015,9 +2015,9 @@ void read_motd () {
     int     c;
 
     if ((fp = fopen ("cb.motd", "r")) != NULL) {
-	while ((c = getc (fp)) != EOF)
-	    writech (slot, c);
-	fclose (fp);
+        while ((c = getc (fp)) != EOF)
+            writech (slot, c);
+        fclose (fp);
     }
 }
 
@@ -2049,9 +2049,9 @@ void set_initial_values () {
     slot -> acct.width = 80;
     slot -> acct.level = 1;
     strcpy (slot -> acct.activefmt,
-	    "Slot %s Channel %c %<%$%> %u/%h%t");
+            "Slot %s Channel %c %<%$%> %u/%h%t");
     strcpy (slot -> acct.msgfmt,
-	    "Slot %s Channel %c %<%u/%h%>\\ [Private]\\_ [Station]_: %m");
+            "Slot %s Channel %c %<%u/%h%>\\ [Private]\\_ [Station]_: %m");
 }
 
 void get_new_pw (pw)
@@ -2060,12 +2060,12 @@ char   *pw; {
     slot -> echo = 1;
     set_initial_values ();
     if ((slot -> acct_pos = create_user (&slot -> acct)) < 0) {
-	writestr (slot, "Error creating account.\n\n");
-	transmit (slot);
-	collapse (slot);
+        writestr (slot, "Error creating account.\n\n");
+        transmit (slot);
+        collapse (slot);
     }
     else
-	enter_cb ();
+        enter_cb ();
 }
 
 void get_new_handle (handle)
@@ -2083,34 +2083,34 @@ char   *id; {
 
  /* Insure that this is a valid ID */
     if (!id[0]) {
-	writestr (slot, "Enter a login: ");
-	return;
+        writestr (slot, "Enter a login: ");
+        return;
     }
 
     for (s = id; *s; s++)
-	if (!isalnum (*s) || (isalpha (*s) && isupper (*s))) {
-	    writestr (slot, "Logins must be alphanumeric lowercase characters.\n");
-	    writestr (slot, "Enter login: ");
-	    return;
-	}
+        if (!isalnum (*s) || (isalpha (*s) && isupper (*s))) {
+            writestr (slot, "Logins must be alphanumeric lowercase characters.\n");
+            writestr (slot, "Enter login: ");
+            return;
+        }
     if (read_user (id, &acct) < 0) {
-	strcpy (slot -> acct.id, id);
-	writestr (slot, "Enter your handle: ");
-	setread (get_new_handle, MAXHANDLE);
+        strcpy (slot -> acct.id, id);
+        writestr (slot, "Enter your handle: ");
+        setread (get_new_handle, MAXHANDLE);
     }
     else
-	writestr (slot, "That login is already in use, enter another: ");
+        writestr (slot, "That login is already in use, enter another: ");
 }
 
 void get_password (pw)
 char   *pw; {
     slot -> echo = 1;
     if (!strcmp (pw, slot -> acct.pw))
-	enter_cb ();
+        enter_cb ();
     else {
-	writestr (slot, "Incorrect password.\n\n");
-	transmit (slot);
-	collapse (slot);
+        writestr (slot, "Incorrect password.\n\n");
+        transmit (slot);
+        collapse (slot);
     }
 }
 
@@ -2119,27 +2119,27 @@ char   *id; {
     struct slot *sp;
 
     if (!strcmp (id, "new")) {
-	writestr (slot, "\nWelcome, new user.\n\n");
-	writestr (slot, "Enter your loginid to identify yourself: ");
-	setread (get_new_login, MAXID);
+        writestr (slot, "\nWelcome, new user.\n\n");
+        writestr (slot, "Enter your loginid to identify yourself: ");
+        setread (get_new_login, MAXID);
     }
     else
-	if ((slot -> acct_pos = read_user (id, &slot -> acct)) < 0) {
-	    writestr (slot, "No account by that name.\n\n");
-	    transmit (slot);
-	    collapse (slot);
-	}
-	else
-	    if ((sp = slotname (id)) != NULL) {
-		writestr (slot, "That user is already logged in.\n\n");
-		transmit (slot);
-		collapse (slot);
-	    }
-	    else {
-		writestr (slot, "Password: ");
-		setread (get_password, MAXPW);
-		slot -> echo = 0;
-	    }
+        if ((slot -> acct_pos = read_user (id, &slot -> acct)) < 0) {
+            writestr (slot, "No account by that name.\n\n");
+            transmit (slot);
+            collapse (slot);
+        }
+        else
+            if ((sp = slotname (id)) != NULL) {
+                writestr (slot, "That user is already logged in.\n\n");
+                transmit (slot);
+                collapse (slot);
+            }
+            else {
+                writestr (slot, "Password: ");
+                setread (get_password, MAXPW);
+                slot -> echo = 0;
+            }
 }
 
 /*
@@ -2165,11 +2165,11 @@ void initslots () {
 
     numslots = FD_SETSIZE;
     if ((slotbase = (struct slot   *) malloc (numslots *
-					      sizeof (struct slot))) == NULL)
+                                              sizeof (struct slot))) == NULL)
       panic ("cbd: malloc");
 
     for (sp = slotbase; sp < numslots + slotbase; sp++)
-	sp -> on = 0;
+        sp -> on = 0;
 }
 
 /*
@@ -2185,64 +2185,64 @@ void ts_none (c)
 unsigned char   c;
 {
     if (c == IAC) {
-	slot -> tsmode = TS_IAC;
-	return;
+        slot -> tsmode = TS_IAC;
+        return;
     }
     if (slot -> readfunc == sendpub &&
-	    slot -> inp == slot -> in)
-	startqueue (slot);
+            slot -> inp == slot -> in)
+        startqueue (slot);
     switch (c) {
-	case '\r': 
-	    slot -> gotcr = 1;
-	    break;
-	case 0: 
-	    if (!slot -> gotcr)
-		break;
-	case '\n': 
-	    slot -> gotcr = 0;
-	    if (slot -> readfunc == sendpub &&
-		    slot -> inp == slot -> in)
-		break;
-	    *slot -> inp = 0;
-	    slot -> inp = slot -> in;
-	    writech (slot, '\n');
-	    slot -> readfunc (slot -> in);
-	    break;
-	case 24: 
-	    while (slot -> inp != slot -> in) {
-		if (slot -> echo)
-		    writestr (slot, "\b \b");
-		slot -> inp--;
-	    }
-	    break;
-	case 127: 
-	case '\b': 
-	    if (slot -> inp != slot -> in) {
-		if (slot -> echo)
-		    writestr (slot, "\b \b");
-		slot -> inp--;
-	    }
-	    break;
-	default: 
-	    if (c >= ' ' && c <= '~' &&
-		    slot -> inp - slot -> in < slot -> inmax - 1) {
-		*slot -> inp++ = c;
-		if (slot -> echo)
-		    writech (slot, c);
-		if (slot -> readfunc == sendpub &&
-			slot -> in[0] == '/' &&
-			slot -> inp == slot -> in + 2) {
-		    writech (slot, '\n');
-		    slot -> inp = slot -> in;
-		    exec_cmd (slot -> in[1]);
-		}
-	    }
+        case '\r': 
+            slot -> gotcr = 1;
+            break;
+        case 0: 
+            if (!slot -> gotcr)
+                break;
+        case '\n': 
+            slot -> gotcr = 0;
+            if (slot -> readfunc == sendpub &&
+                    slot -> inp == slot -> in)
+                break;
+            *slot -> inp = 0;
+            slot -> inp = slot -> in;
+            writech (slot, '\n');
+            slot -> readfunc (slot -> in);
+            break;
+        case 24: 
+            while (slot -> inp != slot -> in) {
+                if (slot -> echo)
+                    writestr (slot, "\b \b");
+                slot -> inp--;
+            }
+            break;
+        case 127: 
+        case '\b': 
+            if (slot -> inp != slot -> in) {
+                if (slot -> echo)
+                    writestr (slot, "\b \b");
+                slot -> inp--;
+            }
+            break;
+        default: 
+            if (c >= ' ' && c <= '~' &&
+                    slot -> inp - slot -> in < slot -> inmax - 1) {
+                *slot -> inp++ = c;
+                if (slot -> echo)
+                    writech (slot, c);
+                if (slot -> readfunc == sendpub &&
+                        slot -> in[0] == '/' &&
+                        slot -> inp == slot -> in + 2) {
+                    writech (slot, '\n');
+                    slot -> inp = slot -> in;
+                    exec_cmd (slot -> in[1]);
+                }
+            }
     }
     if (slot -> readfunc == sendpub &&
-	    slot -> inp == slot -> in &&
-	    slot -> stopped)
-	clearqueue (slot);
-    transmit (slot);		/* speed up typing a little */
+            slot -> inp == slot -> in &&
+            slot -> stopped)
+        clearqueue (slot);
+    transmit (slot);            /* speed up typing a little */
 }
 
 /*
@@ -2274,58 +2274,58 @@ void process_char (c)
 unsigned char   c;
 {
     switch (slot -> tsmode) {
-	case TS_NONE: 
-	    ts_none (c);
-	    break;
-	case TS_IAC: 
-	    switch (c) {
-		case WILL: 
-		    slot -> tsmode = TS_WILL;
-		    break;
-		case WONT: 
-		    slot -> tsmode = TS_WONT;
-		    break;
-		case DO: 
-		    slot -> tsmode = TS_DO;
-		    break;
-		case DONT: 
-		    slot -> tsmode = TS_DONT;
-		    break;
-		case EC: 
-		    ts_none ('\b');
-		    slot -> tsmode = TS_NONE;
-		    break;
-		case EL: 
-		    ts_none (24);
-		    slot -> tsmode = TS_NONE;
-		    break;
-		case AO: 
-		    qflush (&slot -> outq);
-		    qflush (&slot -> stopq);
-		    slot -> tsmode = TS_NONE;/* fixed 11/18 */
-		    break;
-		case AYT: 
-		    writestr (slot, "\n[Yes]\n");
-		default: 
-		    slot -> tsmode = TS_NONE;
-		    break;
-	    }
-	    break;
-	case TS_WILL: 
-	    send_ts (DONT, c);
-	    slot -> tsmode = TS_NONE;
-	    break;
-	case TS_WONT: 
-	    slot -> tsmode = TS_NONE;
-	    break;
-	case TS_DO: 
-	    if (c != TELOPT_SGA && c != TELOPT_ECHO)
-		send_ts (WONT, c);
-	    slot -> tsmode = TS_NONE;
-	    break;
-	case TS_DONT: 
-	    slot -> tsmode = TS_NONE;
-	    break;
+        case TS_NONE: 
+            ts_none (c);
+            break;
+        case TS_IAC: 
+            switch (c) {
+                case WILL: 
+                    slot -> tsmode = TS_WILL;
+                    break;
+                case WONT: 
+                    slot -> tsmode = TS_WONT;
+                    break;
+                case DO: 
+                    slot -> tsmode = TS_DO;
+                    break;
+                case DONT: 
+                    slot -> tsmode = TS_DONT;
+                    break;
+                case EC: 
+                    ts_none ('\b');
+                    slot -> tsmode = TS_NONE;
+                    break;
+                case EL: 
+                    ts_none (24);
+                    slot -> tsmode = TS_NONE;
+                    break;
+                case AO: 
+                    qflush (&slot -> outq);
+                    qflush (&slot -> stopq);
+                    slot -> tsmode = TS_NONE;/* fixed 11/18 */
+                    break;
+                case AYT: 
+                    writestr (slot, "\n[Yes]\n");
+                default: 
+                    slot -> tsmode = TS_NONE;
+                    break;
+            }
+            break;
+        case TS_WILL: 
+            send_ts (DONT, c);
+            slot -> tsmode = TS_NONE;
+            break;
+        case TS_WONT: 
+            slot -> tsmode = TS_NONE;
+            break;
+        case TS_DO: 
+            if (c != TELOPT_SGA && c != TELOPT_ECHO)
+                send_ts (WONT, c);
+            slot -> tsmode = TS_NONE;
+            break;
+        case TS_DONT: 
+            slot -> tsmode = TS_NONE;
+            break;
     }
 }
 
@@ -2349,13 +2349,13 @@ int     fd;
     slot = slotbase + fd;
     time (&slot -> last_typed);
     if ((len = read (fd, buf, MAXBUF)) > 0)
-	for (s = buf; --len >= 0;)
-	    process_char (*s++);
+        for (s = buf; --len >= 0;)
+            process_char (*s++);
     else {
-	on = slot -> on;
-	collapse (slot);
-	if (on)
-	    paabout (slot, "Disconnected", 0);
+        on = slot -> on;
+        collapse (slot);
+        if (on)
+            paabout (slot, "Disconnected", 0);
     }
 }
 
@@ -2374,40 +2374,40 @@ void accept_connection () {
 
     len = sizeof (struct sockaddr);
     if ((fd = accept (sock, (struct sockaddr   *) & sockaddr, &len)) >= 0) {
-	slot = slotbase + fd;
-	if ((hp = gethostbyaddr (&sockaddr.sin_addr, sizeof (struct in_addr),
-				 sockaddr.sin_family)) == NULL)
-	  strncpy (slot -> hostname, inet_ntoa (sockaddr.sin_addr),
-		   MAXHOST - 1);
-	else
-	  strncpy (slot -> hostname, hp -> h_name, MAXHOST - 1);
-	slot -> hostname[MAXHOST - 1] = '\0';
-	yn = 1;
-	setsockopt (fd, SOL_SOCKET, SO_LINGER, (char *) & yn, sizeof yn);
-	slot -> acct_pos = -1;
-	slot -> temp = NULL;
-	time (&slot -> last_typed);
-	slot -> cleanup = NULL;
-	if (!(qcreate (&slot -> outq, MAXOUTQ) &&
-	      qcreate (&slot -> stopq, MAXSTOPQ))) {
-	    writeerr (slot, "Insufficient memory.\r\n\n");
-	    collapse (slot);
-	    return;
-	}
-	FD_SET (fd, &used);
-	setread (login, MAXID);
-	slot -> gotcr = 0;
-	slot -> inp = slot -> in;
-	slot -> wrap_ptr = slot -> wrap_base;
-	slot -> wstop = slot -> wrap = 0;
-	slot -> echo = 1;
-	slot -> tsmode = TS_NONE;
-	send_ts (WILL, TELOPT_SGA);
-	send_ts (WILL, TELOPT_ECHO);
-	writestr (slot, "Unix-CB v1.0  Copyright (c) 1992, Gary Grossman.  \
+        slot = slotbase + fd;
+        if ((hp = gethostbyaddr (&sockaddr.sin_addr, sizeof (struct in_addr),
+                                 sockaddr.sin_family)) == NULL)
+          strncpy (slot -> hostname, inet_ntoa (sockaddr.sin_addr),
+                   MAXHOST - 1);
+        else
+          strncpy (slot -> hostname, hp -> h_name, MAXHOST - 1);
+        slot -> hostname[MAXHOST - 1] = '\0';
+        yn = 1;
+        setsockopt (fd, SOL_SOCKET, SO_LINGER, (char *) & yn, sizeof yn);
+        slot -> acct_pos = -1;
+        slot -> temp = NULL;
+        time (&slot -> last_typed);
+        slot -> cleanup = NULL;
+        if (!(qcreate (&slot -> outq, MAXOUTQ) &&
+              qcreate (&slot -> stopq, MAXSTOPQ))) {
+            writeerr (slot, "Insufficient memory.\r\n\n");
+            collapse (slot);
+            return;
+        }
+        FD_SET (fd, &used);
+        setread (login, MAXID);
+        slot -> gotcr = 0;
+        slot -> inp = slot -> in;
+        slot -> wrap_ptr = slot -> wrap_base;
+        slot -> wstop = slot -> wrap = 0;
+        slot -> echo = 1;
+        slot -> tsmode = TS_NONE;
+        send_ts (WILL, TELOPT_SGA);
+        send_ts (WILL, TELOPT_ECHO);
+        writestr (slot, "Unix-CB v1.0  Copyright (c) 1992, Gary Grossman.  \
 All rights reserved.\n\n");
-	writestr (slot, "Type new if you are a new user.\n");
-	writestr (slot, "Enter your login: ");
+        writestr (slot, "Type new if you are a new user.\n");
+        writestr (slot, "Enter your login: ");
     }
 }
 
@@ -2418,9 +2418,9 @@ fd_set * w;
 
     FD_ZERO (w);
     for (sp = slotbase; sp < slotbase + numslots; sp++)
-	if (FD_ISSET (sp - slotbase, &used) && (sp - slotbase != sock) &&
-		(!qempty (&sp -> outq) || (!qempty (&sp -> stopq) && !sp -> stopped)))
-	    FD_SET (sp - slotbase, w);
+        if (FD_ISSET (sp - slotbase, &used) && (sp - slotbase != sock) &&
+                (!qempty (&sp -> outq) || (!qempty (&sp -> stopq) && !sp -> stopped)))
+            FD_SET (sp - slotbase, w);
 }
 
 /*
@@ -2442,20 +2442,20 @@ void mainloop () {
     FD_SET (sock, &used);
     while (1) {
         memcpy(&r, &used, sizeof(fd_set));
-	get_write (&w);
-	if (select (numslots, &r, &w, NULL, NULL) >= 0) {
-	    for (fd = 0; fd < numslots; fd++)
-		if (FD_ISSET (fd, &used)) {
-		    if (FD_ISSET (fd, &r)) {
-			if (fd == sock)
-			    accept_connection ();
-			else
-			    process_input (fd);
-	            }
-		    if (FD_ISSET (fd, &w))
-			transmit (slotbase + fd);
-		}
-	}
+        get_write (&w);
+        if (select (numslots, &r, &w, NULL, NULL) >= 0) {
+            for (fd = 0; fd < numslots; fd++)
+                if (FD_ISSET (fd, &used)) {
+                    if (FD_ISSET (fd, &r)) {
+                        if (fd == sock)
+                            accept_connection ();
+                        else
+                            process_input (fd);
+                    }
+                    if (FD_ISSET (fd, &w))
+                        transmit (slotbase + fd);
+                }
+        }
     }
 }
 
@@ -2466,40 +2466,28 @@ void initsock () {
     struct sockaddr_in  sockaddr;
 
     if ((sock = socket (AF_INET, SOCK_STREAM, 0)) < 0)
-	panic ("cbd: socket");
+        panic ("cbd: socket");
 
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_addr.s_addr = INADDR_ANY;
     sockaddr.sin_port = htons (inet_port);
 
     if (bind (sock, (struct sockaddr   *) & sockaddr,
-	      sizeof (struct sockaddr)) < 0)
+              sizeof (struct sockaddr)) < 0)
       panic ("cbd: bind");
 
     if (listen (sock, 10) < 0)
-	panic ("cbd: listen");
-}
-
-/* Closes the standard input, output and error files, since a daemon
-   obviously has no use for them. */
-
-void closestd () {
-    close (0);
-    close (1);
-    close (2);
+        panic ("cbd: listen");
 }
 
 int main (argc, argv)
 char   *argv[];
 {
     if (argc == 2)
-	inet_port = atoi (argv[1]);
+        inet_port = atoi (argv[1]);
     time (&startup);
     initsock ();
     initslots ();
-    if (fork ())
-	exit (0);
-    closestd ();
     signal (SIGTERM, do_shutdown);
     mainloop ();
 }
