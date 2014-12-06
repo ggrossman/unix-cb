@@ -3,7 +3,11 @@
 In middle school and high school in the late 80's / early 90's, I spent an
 inordinate amount of time hanging out on [BBS's (Bulletin Board Systems)](http://en.wikipedia.org/wiki/Bulletin_board_system),
 which I'd dial up on a 2400-baud modem and block up my family's phone line
-for hours on end.
+for hours on end. My high school friends weren't at my high school...
+one lived 10 miles north of me, and the other 20 miles south of me.
+We'd talk every day on the BBS's but only occasionally on the phone.
+We'd see each other in person maybe once a month. Without the BBS's, I
+might not have *had* any friends in high school.
 
 Most BBS's of that era were single-line, running off a PC with a modem
 connected to a single dedicated phone line. When you dialed in, there was an
@@ -68,15 +72,16 @@ indicating their subscription status:
   troublesome user back to the MoHo Lobby with the `/b` command.
 - `@` was the Godlike status reserved for the sysops, Mike and Eric.
 
-My first computer was an Apple ][, followed by a 512K "Fat Mac." I'd often
-put in hours on my parents' PC clones as well. But I desperately wanted to
-learn Unix, and this was a few years before Linus Torvalds democratized
-access to Unix-like operating systems. At one point, another MoHo user and I
-learned about a guy who was giving away an old Unix box for free.
-We drove over in his car and picked it up, and it probably weighed 100
-pounds. On the way to get it home, we got in a car accident in Tustin and
-his car was totaled. We were unhurt, but we never did get that Unix box...
-it probably got thrown in the dump.
+My first computer was an Apple ][, followed by a 512K "Fat Mac." I'd
+often put in hours on my parents' PC clones as well. But I desperately
+wanted to learn Unix, and this was a few years before Linus Torvalds
+democratized access to Unix-like operating systems. At one point, my
+friend Steve (another MoHo user) and I learned about a guy who was
+giving away an old Unix box for free.  We drove over in his car and
+picked it up, and it probably weighed 100 pounds. On the way to get it
+home, we got in a car accident in Tustin and his car was totaled. We
+were unhurt, but we never did get that Unix box...  it probably got
+thrown in the dump.
 
 When I was 16, an uncle passed on a discarded Sun 2 workstation to me.
 I knew that Unix-CB was written as multiple processes coordinating via
