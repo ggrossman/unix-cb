@@ -55,10 +55,6 @@ void add_recent ();
 
 #define CB_VERSION "Unix-CB 1.0 Beta 11/11/92 Revision 01"
 
-/* Secret password to get @ access */
-
-#define SECRET_PW "verminx"
-
 /* Telnet control sequence processing */
 
 #define TS_NONE 0
@@ -1954,8 +1950,9 @@ void help () {
 
 void secret2 (pw)
 char   *pw; {
+    char *secret_pw = getenv("SECRET_PW");
     slot -> echo = 1;
-    if (!strcmp (pw, SECRET_PW)) {
+    if (secret_pw && !strcmp (pw, secret_pw)) {
         writestr (slot, "Access level changed.\n");
         slot -> acct.level = 3;
         setread (sendpub, MAXMSG);
